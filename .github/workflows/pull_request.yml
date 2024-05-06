@@ -27,7 +27,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: siderolabs/conform@v0.1.0-alpha.27
+      - uses: siderolabs/conform@v0.1.0-alpha.30
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
