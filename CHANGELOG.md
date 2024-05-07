@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/ProbstenHias/external-dns-anexia-webhook/compare/v0.1.2...v0.1.3) (2024-05-07)
+
+
+### Bug Fixes
+
+* reorder record parsing in GetRecords function ([#9](https://github.com/ProbstenHias/external-dns-anexia-webhook/issues/9)) ([4b5a0cb](https://github.com/ProbstenHias/external-dns-anexia-webhook/commit/4b5a0cbebd245bf2c7e60ec1ad1b6777b165a182))
+
 ## [0.1.2](https://github.com/ProbstenHias/external-dns-anexia-webhook/compare/v0.1.1...v0.1.2) (2024-05-07)
 
 
