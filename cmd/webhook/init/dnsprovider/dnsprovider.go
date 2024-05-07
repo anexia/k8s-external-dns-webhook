@@ -5,9 +5,9 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/caarlos0/env/v11"
 	"github.com/probstenhias/external-dns-anexia-webhook/cmd/webhook/init/configuration"
 	"github.com/probstenhias/external-dns-anexia-webhook/internal/anexia"
-	"github.com/caarlos0/env/v11"
 	"sigs.k8s.io/external-dns/endpoint"
 	"sigs.k8s.io/external-dns/provider"
 
