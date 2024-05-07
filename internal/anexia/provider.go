@@ -73,10 +73,9 @@ func (c *DNSClient) GetRecords(ctx context.Context) ([]*anxcloudDns.Record, erro
 		}
 	}
 
-	record := anxcloudDns.Record{}
-
 	records := make([]*anxcloudDns.Record, 0)
 	for res := range channel {
+		record := anxcloudDns.Record{}
 		if err := res(&record); err != nil {
 			log.Errorf("failed to parse record: %v", err)
 			return nil, err
