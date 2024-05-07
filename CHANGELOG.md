@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.1.2](https://github.com/ProbstenHias/external-dns-anexia-webhook/compare/v0.1.1...v0.1.2) (2024-05-07)
+
+
+### Bug Fixes
+
+* update Dockerfile entrypoint to use Anexia webhook ([#8](https://github.com/ProbstenHias/external-dns-anexia-webhook/issues/8)) ([cb23803](https://github.com/ProbstenHias/external-dns-anexia-webhook/commit/cb23803208d016143aceb9fad4b5c5557d413286))
+
+
+### Miscellaneous Chores
+
+* update License file ([726710f](https://github.com/ProbstenHias/external-dns-anexia-webhook/commit/726710f9845919b8e0b775e7d7c045309826893d))
+
 ## [0.1.1](https://github.com/ProbstenHias/external-dns-anexia-webhook/compare/v0.1.0...v0.1.1) (2024-05-06)
 
 
