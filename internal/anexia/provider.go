@@ -153,6 +153,11 @@ func (c *DNSClient) CreateRecord(ctx context.Context, _ string, record *anxcloud
 		return nil
 	}
 	log.Debugf("create record %v ...", record)
+
+	if record.Type == "TXT" {
+		record.RData = strings.TrimRight(strings.TrimLeft(record.RData, "\""), "\"")
+	}
+
 	err := c.client.Create(ctx, record)
 	if err != nil {
 		log.Errorf("failed to create record %v: %v", record, err)
