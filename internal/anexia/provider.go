@@ -39,10 +39,9 @@ func (c *DNSClient) GetZones(ctx context.Context) ([]*anxcloudDns.Zone, error) {
 		return nil, err
 	}
 
-	zone := anxcloudDns.Zone{}
-
 	zones := make([]*anxcloudDns.Zone, 0)
 	for res := range channel {
+		zone := anxcloudDns.Zone{}
 		if err := res(&zone); err != nil {
 			log.Errorf("failed to parse zone: %v", err)
 			return nil, err
