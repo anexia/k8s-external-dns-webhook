@@ -54,7 +54,8 @@ func (c *DNSClient) GetZones(ctx context.Context) ([]*anxcloudDns.Zone, error) {
 
 func (c *DNSClient) GetRecords(ctx context.Context) ([]*anxcloudDns.Record, error) {
 	log.Debugf("get all records ...")
-	channel := make(types.ObjectChannel)
+
+	records := make([]*anxcloudDns.Record, 0)
 
 	allZones, err := c.GetZones(ctx)
 	if err != nil {
@@ -63,6 +64,8 @@ func (c *DNSClient) GetRecords(ctx context.Context) ([]*anxcloudDns.Record, erro
 	}
 
 	for _, zone := range allZones {
+		channel := make(types.ObjectChannel)
+
 		log.Debugf("get records for zone %s ...", zone.Name)
 		zoneName := zone.Name
 
@@ -70,16 +73,15 @@ func (c *DNSClient) GetRecords(ctx context.Context) ([]*anxcloudDns.Record, erro
 			log.Errorf("failed to list records for zone %s: %v", zoneName, err)
 			return nil, err
 		}
-	}
 
-	records := make([]*anxcloudDns.Record, 0)
-	for res := range channel {
-		record := anxcloudDns.Record{}
-		if err := res(&record); err != nil {
-			log.Errorf("failed to parse record: %v", err)
-			return nil, err
+		for res := range channel {
+			record := anxcloudDns.Record{}
+			if err := res(&record); err != nil {
+				log.Errorf("failed to parse record: %v", err)
+				return nil, err
+			}
+			records = append(records, &record)
 		}
-		records = append(records, &record)
 	}
 
 	return records, nil
