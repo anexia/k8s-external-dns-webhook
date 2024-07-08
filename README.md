@@ -63,7 +63,7 @@ sidecars:
       - name: ANEXIA_API_TOKEN
         valueFrom:
           secretKeyRef:
-            name: aneixa-configuration
+            name: anexia-configuration
             key: token
       - name: SERVER_HOST
         value: "0.0.0.0"
