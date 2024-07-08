@@ -141,7 +141,7 @@ jobs:
       - name: Release via GoReleaser
         uses: goreleaser/goreleaser-action@v6
         with:
-          args: -p 3 release --snapshot --clean --skip=publish --timeout 60m0s --skip sign
+          args: -p 3 release --snapshot --clean --skip=publish,sign --timeout 60m0s
           version: latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
