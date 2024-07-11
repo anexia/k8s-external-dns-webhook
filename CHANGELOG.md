@@ -1,5 +1,19 @@
 # Changelog
 
+## [0.1.5](https://github.com/ProbstenHias/external-dns-anexia-webhook/compare/v0.1.4...v0.1.5) (2024-07-10)
+
+
+### Bug Fixes
+
+* do not require image signing during pr ([#27](https://github.com/ProbstenHias/external-dns-anexia-webhook/issues/27)) ([63138df](https://github.com/ProbstenHias/external-dns-anexia-webhook/commit/63138df80e3add4e6afcbf1e2d52aed41d3e03ef))
+* fix typo ([#21](https://github.com/ProbstenHias/external-dns-anexia-webhook/issues/21)) ([3d30e2e](https://github.com/ProbstenHias/external-dns-anexia-webhook/commit/3d30e2ec5f6aa6f6baa05aec6b8719a3c7c7d87a))
+* set the sign skip correctly in pul_request action ([#29](https://github.com/ProbstenHias/external-dns-anexia-webhook/issues/29)) ([2811151](https://github.com/ProbstenHias/external-dns-anexia-webhook/commit/28111518d25d42873d353a615d8d5d94da4938db))
+
+
+### Miscellaneous Chores
+
+* **deps:** bump anchore/sbom-action from 0.16.0 to 0.16.1 ([#30](https://github.com/ProbstenHias/external-dns-anexia-webhook/issues/30)) ([c7d40d9](https://github.com/ProbstenHias/external-dns-anexia-webhook/commit/c7d40d9d5c9b0e5bf1429f83391b81b260b78c74))
+
 ## [0.1.4](https://github.com/ProbstenHias/external-dns-anexia-webhook/compare/v0.1.3...v0.1.4) (2024-07-06)
 
 
