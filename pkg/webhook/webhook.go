@@ -2,6 +2,7 @@ package webhook
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
@@ -71,7 +72,7 @@ func (p *Webhook) headerCheck(isContentType bool, w http.ResponseWriter, r *http
 		} else {
 			msg += "an accept header"
 		}
-		err := fmt.Errorf(msg)
+		err := errors.New(msg)
 
 		_, writeErr := fmt.Fprint(w, err.Error())
 		if writeErr != nil {
@@ -208,7 +209,7 @@ func (p *Webhook) Negotiate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	b, err := p.provider.GetDomainFilter().MarshalJSON()
+	b, err := p.provider.GetDomainFilter().(endpoint.DomainFilter).MarshalJSON()
 	if err != nil {
 		log.Errorf("failed to marshal domain filter, request method: %s, request path: %s", r.Method, r.URL.Path)
 		w.WriteHeader(http.StatusInternalServerError)

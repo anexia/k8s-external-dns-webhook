@@ -1,20 +1,20 @@
 package anexia
 
 import (
+	"context"
 	"fmt"
 	"math/rand"
 	"strings"
 	"testing"
 
-	"context"
-
-	"github.com/caarlos0/env/v11"
-	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	anxcloudDns "go.anx.io/go-anxcloud/pkg/apis/clouddns/v1"
 	"sigs.k8s.io/external-dns/endpoint"
 	"sigs.k8s.io/external-dns/plan"
+
+	env "github.com/caarlos0/env/v11"
+	log "github.com/sirupsen/logrus"
+	anxcloudDns "go.anx.io/go-anxcloud/pkg/apis/clouddns/v1"
 )
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
