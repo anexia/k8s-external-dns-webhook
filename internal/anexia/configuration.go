@@ -1,7 +1,7 @@
 package anexia
 
 import (
-	"github.com/caarlos0/env/v11"
+	env "github.com/caarlos0/env/v11"
 	log "github.com/sirupsen/logrus"
 )
 
