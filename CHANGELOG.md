@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.1.6](https://github.com/ProbstenHias/external-dns-anexia-webhook/compare/v0.1.5...v0.1.6) (2024-09-25)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump anchore/sbom-action from 0.16.1 to 0.17.0 ([#31](https://github.com/ProbstenHias/external-dns-anexia-webhook/issues/31)) ([b0fea23](https://github.com/ProbstenHias/external-dns-anexia-webhook/commit/b0fea23766e0b28ad765c8bbad9e90b81e552733))
+* **deps:** bump anchore/sbom-action from 0.17.0 to 0.17.1 ([#37](https://github.com/ProbstenHias/external-dns-anexia-webhook/issues/37)) ([9a87b20](https://github.com/ProbstenHias/external-dns-anexia-webhook/commit/9a87b20eca191761d8028dd043d5f488fc7caf40))
+* **deps:** bump anchore/sbom-action from 0.17.1 to 0.17.2 ([#38](https://github.com/ProbstenHias/external-dns-anexia-webhook/issues/38)) ([37dc2ff](https://github.com/ProbstenHias/external-dns-anexia-webhook/commit/37dc2ff2323c7026126e3d40f80dc8c1b1c29b6b))
+* **deps:** bump github.com/caarlos0/env/v11 from 11.1.0 to 11.2.2 ([#35](https://github.com/ProbstenHias/external-dns-anexia-webhook/issues/35)) ([fd33c0a](https://github.com/ProbstenHias/external-dns-anexia-webhook/commit/fd33c0af66694c0d438277d108bd959042e89758))
+* **deps:** bump go.anx.io/go-anxcloud from 0.7.2 to 0.7.3 ([#34](https://github.com/ProbstenHias/external-dns-anexia-webhook/issues/34)) ([0dc6320](https://github.com/ProbstenHias/external-dns-anexia-webhook/commit/0dc63205f19ed23c6f7535b96127349a3bb77a39))
+* **deps:** bump sigs.k8s.io/external-dns from 0.14.2 to 0.15.0 ([#39](https://github.com/ProbstenHias/external-dns-anexia-webhook/issues/39)) ([44d35fa](https://github.com/ProbstenHias/external-dns-anexia-webhook/commit/44d35fa518f0d2310e3d3a1b090bae98d023e8ef))
+* **deps:** bump sigstore/cosign-installer from 3.5.0 to 3.6.0 ([#36](https://github.com/ProbstenHias/external-dns-anexia-webhook/issues/36)) ([2e672d1](https://github.com/ProbstenHias/external-dns-anexia-webhook/commit/2e672d1efa69dd03c91f26c3e0e64d2c67c97b59))
+
 ## [0.1.5](https://github.com/ProbstenHias/external-dns-anexia-webhook/compare/v0.1.4...v0.1.5) (2024-07-10)
 
 
