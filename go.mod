@@ -9,7 +9,7 @@ require (
 	github.com/go-chi/chi/v5 v5.1.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/stretchr/testify v1.9.0
-	go.anx.io/go-anxcloud v0.7.3
+	go.anx.io/go-anxcloud v0.7.4
 	sigs.k8s.io/external-dns v0.15.0
 )
 
@@ -36,8 +36,8 @@ require (
 	github.com/prometheus/procfs v0.15.1 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
 	golang.org/x/net v0.28.0 // indirect
-	golang.org/x/sys v0.23.0 // indirect
-	golang.org/x/text v0.17.0 // indirect
+	golang.org/x/sys v0.26.0 // indirect
+	golang.org/x/text v0.19.0 // indirect
 	google.golang.org/protobuf v1.34.2 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
