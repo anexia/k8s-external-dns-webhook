@@ -1,13 +1,15 @@
-# ExternalDNS - Anexia Webhook Provider
+# external-dns for Anexia CloudDNS
 
-[![License](https://img.shields.io/github/license/probstenhias/external-dns-anexia-webhook?style=for-the-badge)](LICENSE.md)
-[![Build](https://img.shields.io/github/actions/workflow/status/probstenhias/external-dns-anexia-webhook/pull_request.yml?style=for-the-badge)](https://github.com/probstenhias/external-dns-anexia-webhook/actions/workflows/pull_request.yml)
-[![GoReport](https://goreportcard.com/badge/github.com/probstenhias/external-dns-anexia-webhook?style=for-the-badge)](https://goreportcard.com/report/github.com/probstenhias/external-dns-anexia-webhook)
-[![Coverage](https://img.shields.io/coverallsCoverage/github/ProbstenHias/external-dns-anexia-webhook?style=for-the-badge)](https://coveralls.io/github/ProbstenHias/external-dns-anexia-webhook?branch=main)
+[![License](https://img.shields.io/github/license/anexia/external-dns-webhook?style=for-the-badge)](LICENSE.md)
+[![Build](https://img.shields.io/github/actions/workflow/status/anexia/external-dns-webhook/pull_request.yml?style=for-the-badge)](https://github.com/anexia/external-dns-webhook/actions/workflows/pull_request.yml)
+[![GoReport](https://goreportcard.com/badge/github.com/anexia/external-dns-webhook?style=for-the-badge)](https://goreportcard.com/report/github.com/anexia/external-dns-webhook)
+[![Coverage](https://img.shields.io/coverallsCoverage/github/anexia/external-dns-webhook?style=for-the-badge)](https://coveralls.io/github/anexia/external-dns-webhook?branch=main)
 
 The Anexia Webhook Provider for [ExternalDNS](https://github.com/kubernetes-sigs/external-dns) allows you to use Anexia's DNS API to manage DNS records for your domains.
 
 The provider is heavily inspired by the [ExternalDNS - IONOS Webhook](https://github.com/ionos-cloud/external-dns-ionos-webhook) and some inspiration taken from the [External DNS - Adguard Home Provider](https://github.com/muhlba91/external-dns-provider-adguard/tree/main).
+
+The initial work was by done by @ProbstenHias, who still serves as the primary maintainer. Thanks a lot! :purple_heart:
 
 ## Configuration
 
@@ -15,7 +17,7 @@ See [cmd/webhook/init/configuration/configuration.go](cmd/webhook/init/configura
 
 ## Kubernetes Deployment
 
-The Anexia Webhook Provider is provided as  an OCI image in [ghcr.io/probstenhias/external-dns-anexia-webhook](https://ghcr.io/probstenhias/external-dns-anexia-webhook).
+The Anexia Webhook Provider is provided as  an OCI image in [ghcr.io/anexia/external-dns-webhook](https://ghcr.io/anexia/external-dns-webhook).
 
 The following is an example deployment for the Anexia Webhook Provider:
 
@@ -48,7 +50,7 @@ extraArgs:
 provider:
   name: webhook
   webhook:
-    image: ghcr.io/probstenhias/external-dns-anexia-webhook
+    image: ghcr.io/anexia/external-dns-webhook
     tag: v0.1.6
     env:
       - name: LOG_LEVEL

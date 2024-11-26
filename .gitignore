@@ -3,5 +3,5 @@
 build/
 dist/
 reports/
-
+bin/
 covprofile

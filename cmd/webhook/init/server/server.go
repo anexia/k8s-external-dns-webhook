@@ -14,9 +14,9 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/probstenhias/external-dns-anexia-webhook/cmd/webhook/init/configuration"
+	"go.anx.io/external-dns-webhook/cmd/webhook/init/configuration"
 
-	"github.com/probstenhias/external-dns-anexia-webhook/pkg/webhook"
+	"go.anx.io/external-dns-webhook/pkg/webhook"
 )
 
 // Init server initialization function
