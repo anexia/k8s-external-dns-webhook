@@ -1,4 +1,4 @@
-module github.com/probstenhias/external-dns-anexia-webhook
+module go.anx.io/external-dns-webhook
 
 go 1.23
 

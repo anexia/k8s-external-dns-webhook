@@ -10,9 +10,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/probstenhias/external-dns-anexia-webhook/cmd/webhook/init/configuration"
-	"github.com/probstenhias/external-dns-anexia-webhook/pkg/webhook"
 	log "github.com/sirupsen/logrus"
+	"go.anx.io/external-dns-webhook/cmd/webhook/init/configuration"
+	"go.anx.io/external-dns-webhook/pkg/webhook"
 	"sigs.k8s.io/external-dns/endpoint"
 	"sigs.k8s.io/external-dns/plan"
 )

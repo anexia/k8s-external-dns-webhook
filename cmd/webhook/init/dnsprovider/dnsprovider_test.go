@@ -3,9 +3,9 @@ package dnsprovider
 import (
 	"testing"
 
-	"github.com/probstenhias/external-dns-anexia-webhook/cmd/webhook/init/configuration"
 	log "github.com/sirupsen/logrus"
 	"github.com/stretchr/testify/assert"
+	"go.anx.io/external-dns-webhook/cmd/webhook/init/configuration"
 )
 
 func TestInit(t *testing.T) {

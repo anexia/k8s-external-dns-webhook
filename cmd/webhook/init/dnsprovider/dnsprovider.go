@@ -5,8 +5,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/probstenhias/external-dns-anexia-webhook/cmd/webhook/init/configuration"
-	"github.com/probstenhias/external-dns-anexia-webhook/internal/anexia"
+	"go.anx.io/external-dns-webhook/cmd/webhook/init/configuration"
+	"go.anx.io/external-dns-webhook/internal/anexia"
 	"sigs.k8s.io/external-dns/endpoint"
 	"sigs.k8s.io/external-dns/provider"
 

@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 
-	"github.com/probstenhias/external-dns-anexia-webhook/cmd/webhook/init/configuration"
-	"github.com/probstenhias/external-dns-anexia-webhook/cmd/webhook/init/dnsprovider"
-	"github.com/probstenhias/external-dns-anexia-webhook/cmd/webhook/init/logging"
-	"github.com/probstenhias/external-dns-anexia-webhook/cmd/webhook/init/server"
-	"github.com/probstenhias/external-dns-anexia-webhook/pkg/webhook"
 	log "github.com/sirupsen/logrus"
+	"go.anx.io/external-dns-webhook/cmd/webhook/init/configuration"
+	"go.anx.io/external-dns-webhook/cmd/webhook/init/dnsprovider"
+	"go.anx.io/external-dns-webhook/cmd/webhook/init/logging"
+	"go.anx.io/external-dns-webhook/cmd/webhook/init/server"
+	"go.anx.io/external-dns-webhook/pkg/webhook"
 )
 
 const banner = `
