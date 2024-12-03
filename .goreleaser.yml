@@ -45,9 +45,9 @@ dockers:
     goos: linux
     goarch: amd64
     image_templates:
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:latest-amd64
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:{{ .Env.CI_COMMIT_SHA }}-amd64
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:{{ .Env.CI_COMMIT_TAG }}-amd64
+      - ghcr.io/anexia/k8s-external-dns-webhook:latest-amd64
+      - ghcr.io/anexia/k8s-external-dns-webhook:{{ .Env.CI_COMMIT_SHA }}-amd64
+      - ghcr.io/anexia/k8s-external-dns-webhook:{{ .Env.CI_COMMIT_TAG }}-amd64
     build_flag_templates:
       - --pull
       - --platform=linux/amd64
@@ -58,9 +58,9 @@ dockers:
     goos: linux
     goarch: arm64
     image_templates:
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:latest-arm64
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:{{ .Env.CI_COMMIT_SHA }}-arm64
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:{{ .Env.CI_COMMIT_TAG }}-arm64
+      - ghcr.io/anexia/k8s-external-dns-webhook:latest-arm64
+      - ghcr.io/anexia/k8s-external-dns-webhook:{{ .Env.CI_COMMIT_SHA }}-arm64
+      - ghcr.io/anexia/k8s-external-dns-webhook:{{ .Env.CI_COMMIT_TAG }}-arm64
     build_flag_templates:
       - --pull
       - --platform=linux/arm64
@@ -72,9 +72,9 @@ dockers:
     goarch: arm
     goarm: "7"
     image_templates:
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:latest-armv7
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:{{ .Env.CI_COMMIT_SHA }}-armv7
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:{{ .Env.CI_COMMIT_TAG }}-armv7
+      - ghcr.io/anexia/k8s-external-dns-webhook:latest-armv7
+      - ghcr.io/anexia/k8s-external-dns-webhook:{{ .Env.CI_COMMIT_SHA }}-armv7
+      - ghcr.io/anexia/k8s-external-dns-webhook:{{ .Env.CI_COMMIT_TAG }}-armv7
     build_flag_templates:
       - --pull
       - --platform=linux/arm/v7
@@ -82,21 +82,21 @@ dockers:
       - --build-arg=CI_COMMIT_SHA="{{ .Env.CI_COMMIT_SHA }}"
       - --build-arg=CI_COMMIT_TAG="{{ .Env.CI_COMMIT_TAG }}"
 docker_manifests:
-  - name_template: ghcr.io/probstenhias/external-dns-anexia-webhook:latest
+  - name_template: ghcr.io/anexia/k8s-external-dns-webhook:latest
     image_templates:
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:latest-amd64
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:latest-arm64
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:latest-armv7
-  - name_template: ghcr.io/probstenhias/external-dns-anexia-webhook:{{ .Env.CI_COMMIT_SHA }}
+      - ghcr.io/anexia/k8s-external-dns-webhook:latest-amd64
+      - ghcr.io/anexia/k8s-external-dns-webhook:latest-arm64
+      - ghcr.io/anexia/k8s-external-dns-webhook:latest-armv7
+  - name_template: ghcr.io/anexia/k8s-external-dns-webhook:{{ .Env.CI_COMMIT_SHA }}
     image_templates:
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:{{ .Env.CI_COMMIT_SHA }}-amd64
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:{{ .Env.CI_COMMIT_SHA }}-arm64
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:{{ .Env.CI_COMMIT_SHA }}-armv7
-  - name_template: ghcr.io/probstenhias/external-dns-anexia-webhook:{{ .Env.CI_COMMIT_TAG }}
+      - ghcr.io/anexia/k8s-external-dns-webhook:{{ .Env.CI_COMMIT_SHA }}-amd64
+      - ghcr.io/anexia/k8s-external-dns-webhook:{{ .Env.CI_COMMIT_SHA }}-arm64
+      - ghcr.io/anexia/k8s-external-dns-webhook:{{ .Env.CI_COMMIT_SHA }}-armv7
+  - name_template: ghcr.io/anexia/k8s-external-dns-webhook:{{ .Env.CI_COMMIT_TAG }}
     image_templates:
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:{{ .Env.CI_COMMIT_TAG }}-amd64
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:{{ .Env.CI_COMMIT_TAG }}-arm64
-      - ghcr.io/probstenhias/external-dns-anexia-webhook:{{ .Env.CI_COMMIT_TAG }}-armv7
+      - ghcr.io/anexia/k8s-external-dns-webhook:{{ .Env.CI_COMMIT_TAG }}-amd64
+      - ghcr.io/anexia/k8s-external-dns-webhook:{{ .Env.CI_COMMIT_TAG }}-arm64
+      - ghcr.io/anexia/k8s-external-dns-webhook:{{ .Env.CI_COMMIT_TAG }}-armv7
 changelog:
   disable: true
   use: github
