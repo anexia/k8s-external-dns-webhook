@@ -1,12 +1,20 @@
 # Changelog
 
-## [0.1.7](https://github.com/anexia/k8s-external-dns-webhook/compare/v0.1.6...v0.1.7) (2024-12-03)
+## [0.2.0](https://github.com/anexia/k8s-external-dns-webhook/compare/v0.1.6...v0.2.0) (2024-12-04)
 
+:warning: As part of the migration to the Anexia organisation, the path to the container image changed!
 
-### Bug Fixes
+```diff
+- ghcr.io/probstenhias/external-dns-anexia-webhook:latest-amd64
++ ghcr.io/anexia/k8s-external-dns-webhook:latest-amd64
+```
 
-* update image name for goreleaser ([90b1f96](https://github.com/anexia/k8s-external-dns-webhook/commit/90b1f962dd494b46568879f1d764416012c2cd9c))
+In case you were importing this project as a Go module, you also have to change the module:
 
+```diff
+- import "ghcr.io/probstenhias/external-dns-anexia-webhook"
++ import "go.anx.io/external-dns-webhook"
+```
 
 ### Miscellaneous Chores
 
