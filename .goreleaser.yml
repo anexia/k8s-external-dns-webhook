@@ -1,4 +1,6 @@
 ---
+# yaml-language-server: $schema=https://goreleaser.com/static/schema.json
+version: 2
 archives:
   - id: archive
     name_template: "{{ .Binary }}-{{ .Tag }}-{{ .Os }}-{{ .Arch }}"
@@ -117,4 +119,4 @@ release:
   disable: false
   prerelease: auto
 snapshot:
-  name_template: "{{ .Tag }}-SNAPSHOT"
+  version_template: "{{ .Tag }}-SNAPSHOT"
