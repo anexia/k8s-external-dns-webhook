@@ -1,6 +1,7 @@
 module go.anx.io/external-dns-webhook
 
-go 1.23
+go 1.23.3
+
 toolchain go1.23.5
 
 require (
