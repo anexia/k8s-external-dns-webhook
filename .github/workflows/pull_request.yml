@@ -14,9 +14,6 @@ permissions:
   packages: read
   id-token: write
 
-env:
-  GO111MODULE: "on"
-
 jobs:
   conform:
     runs-on: ubuntu-latest
@@ -34,27 +31,18 @@ jobs:
   lint_provider:
     runs-on: ubuntu-latest
     name: Lint Provider
-    strategy:
-      max-parallel: 4
-      matrix:
-        go-version: [1.23.x]
-        golangci-lint-version: [v1.61.0]
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Install Go
         uses: actions/setup-go@v5
         with:
-          go-version: "${{ matrix.go-version }}"
+          go-version: stable
 
-      - name: Lint Provider
+      - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v6
         with:
-          version: "${{ matrix.golangci-lint-version }}"
           args: -c .golangci.yml
 
       - name: Vet Provider
@@ -64,29 +52,20 @@ jobs:
   test:
     runs-on: ubuntu-latest
     name: Unit Tests
-    strategy:
-      max-parallel: 4
-      matrix:
-        go-version: [1.23.x]
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Install Go
         uses: actions/setup-go@v5
         with:
-          go-version: "${{ matrix.go-version }}"
+          go-version: stable
 
       - name: Run Tests
         run: |
           make test
 
-      - run: |
-          go install github.com/mattn/goveralls@latest
-          goveralls -coverprofile=covprofile -service=github
+      - run: go tool goveralls -coverprofile=covprofile -service=github
         env:
           COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -96,9 +75,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@0ad4b8fadaa221de15dcec353f45205ec38ea70b # v4
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v4
 
       - name: Lint Dockerfile
         uses: hadolint/hadolint-action@v3.1.0
@@ -108,25 +85,14 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: Build Provider and Container
-    needs:
-      - lint_provider
-      - dockerfile_lint
-      - test
-    strategy:
-      max-parallel: 4
-      matrix:
-        go-version: [1.23.x]
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Install Go
         uses: actions/setup-go@v5
         with:
-          go-version: "${{ matrix.go-version }}"
+          go-version: stable
 
       - name: Install cosign
         uses: sigstore/cosign-installer@v3.7.0
