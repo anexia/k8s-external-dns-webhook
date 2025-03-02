@@ -16,13 +16,15 @@ policies:
       maximumOfOneCommit: false
       conventional:
         types:
-          - refactor
-          - perf
+          - build
           - chore
-          - test
+          - ci
           - docs
           - no_type
-          - build
+          - perf
+          - refactor
+          - style
+          - test
         scopes:
           - release
           - deps
