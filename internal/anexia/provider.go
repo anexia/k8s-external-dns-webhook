@@ -25,19 +25,20 @@ type DNSService interface {
 	GetZones(ctx context.Context) ([]*anxcloudDns.Zone, error)
 	GetRecords(ctx context.Context) ([]*anxcloudDns.Record, error)
 	GetRecordsByZoneNameAndName(ctx context.Context, zoneName, name string) ([]*anxcloudDns.Record, error)
-	GetZonesByDomainName(ctx context.Context, domainName string) ([]*anxcloudDns.Zone, error)
-	DeleteRecord(ctx context.Context, zoneName, recordID string) error
-	CreateRecord(ctx context.Context, zoneName string, record *anxcloudDns.Record) error
+	DeleteRecord(ctx context.Context, record *anxcloudDns.Record) error
+	CreateRecord(ctx context.Context, record *anxcloudDns.Record) error
 }
 
 func (c *DNSClient) GetZones(ctx context.Context) ([]*anxcloudDns.Zone, error) {
 	log.Debugf("get all zones ...")
 	channel := make(types.ObjectChannel)
 
-	if err := c.client.List(ctx, &anxcloudDns.Zone{}, api.ObjectChannel(&channel)); err != nil {
+	if err := c.client.List(ctx, &anxcloudDns.Zone{},
+		api.ObjectChannel(&channel),
+		api.FullObjects(true),
+	); err != nil {
 		return nil, fmt.Errorf("failed to list zones while getting all zones: %w", err)
 	}
-
 	zone := anxcloudDns.Zone{}
 
 	zones := make([]*anxcloudDns.Zone, 0)
@@ -64,7 +65,10 @@ func (c *DNSClient) GetRecords(ctx context.Context) ([]*anxcloudDns.Record, erro
 		log.Debugf("get records for zone %s ...", zone.Name)
 		zoneName := zone.Name
 
-		if err := c.client.List(ctx, &anxcloudDns.Record{ZoneName: zoneName}, api.ObjectChannel(&channel)); err != nil {
+		if err := c.client.List(ctx, &anxcloudDns.Record{ZoneName: zoneName},
+			api.ObjectChannel(&channel),
+			api.FullObjects(true),
+		); err != nil {
 			return nil, fmt.Errorf("failed to list records for zone %s: %w", zoneName, err)
 		}
 	}
@@ -102,43 +106,21 @@ func (c *DNSClient) GetRecordsByZoneNameAndName(ctx context.Context, zoneName, n
 	return records, nil
 }
 
-func (c *DNSClient) GetZonesByDomainName(ctx context.Context, domainName string) ([]*anxcloudDns.Zone, error) {
-	log.Debugf("get zones for domain %s ...", domainName)
-	allZones, err := c.GetZones(ctx)
-	if err != nil {
-		return nil, fmt.Errorf("failed to get zones: %w", err)
-	}
-	possibleZones := make([]*anxcloudDns.Zone, 0)
-	for _, zone := range allZones {
-		if strings.HasSuffix(domainName, zone.Name) {
-			possibleZones = append(possibleZones, zone)
-		}
-	}
-
-	// sort zones by length, longest first
-	// this is necessary because the domain name might match multiple zones
-	// and we want to use the most specific one
-	sort.Slice(possibleZones, func(i, j int) bool {
-		return len(possibleZones[i].Name) > len(possibleZones[j].Name)
-	})
-	return possibleZones, nil
-}
-
-func (c *DNSClient) DeleteRecord(ctx context.Context, zoneName, recordID string) error {
+func (c *DNSClient) DeleteRecord(ctx context.Context, record *anxcloudDns.Record) error {
 	if c.dryRun {
-		log.Infof("dry run: would delete record %s", recordID)
+		log.Infof("dry run: would delete record %v", record)
 		return nil
 	}
-	log.Debugf("delete record %s ...", recordID)
-	err := c.client.Destroy(ctx, &anxcloudDns.Record{ZoneName: zoneName, Identifier: recordID})
+	log.Debugf("delete record %v ...", record)
+	err := c.client.Destroy(ctx, record)
 	if err != nil {
-		return fmt.Errorf("failed to delete record %s: %w", recordID, err)
+		return fmt.Errorf("failed to delete record %v: %w", record, err)
 	}
 	log.Debug("record deleted")
 	return nil
 }
 
-func (c *DNSClient) CreateRecord(ctx context.Context, _ string, record *anxcloudDns.Record) error {
+func (c *DNSClient) CreateRecord(ctx context.Context, record *anxcloudDns.Record) error {
 	if c.dryRun {
 		log.Infof("dry run: would create record %v", record)
 		return nil
@@ -203,6 +185,8 @@ func (p *Provider) Records(ctx context.Context) ([]*endpoint.Endpoint, error) {
 		return nil, fmt.Errorf("failed to get records: %w", err)
 	}
 
+	// we have to do a little merge magic for records that are identical except for the data
+	// while externalDNS target can be a list of IPs, in clouddns we have multiple records with different data
 	groups := make(map[string][]*endpoint.Endpoint, 0)
 	for _, record := range records {
 		ep := recordToEndpoint(record)
@@ -210,7 +194,7 @@ func (p *Provider) Records(ctx context.Context) ([]*endpoint.Endpoint, error) {
 			log.Infof("Skipping record %s because it was filtered out by the domain filter", ep.DNSName)
 			continue
 		}
-		key := ep.DNSName + ep.RecordType
+		key := ep.DNSName + ep.RecordType + fmt.Sprint(ep.RecordTTL)
 		groups[key] = append(groups[key], ep)
 	}
 
@@ -231,12 +215,7 @@ func (p *Provider) Records(ctx context.Context) ([]*endpoint.Endpoint, error) {
 
 func recordToEndpoint(record *anxcloudDns.Record) *endpoint.Endpoint {
 	return &endpoint.Endpoint{
-		DNSName: func() string {
-			if record.Name == "@" || record.Name == "" {
-				return record.ZoneName
-			}
-			return record.Name + "." + record.ZoneName
-		}(),
+		DNSName:    record.Name + "." + record.ZoneName,
 		RecordTTL:  endpoint.TTL(record.TTL),
 		RecordType: record.Type,
 		Targets:    []string{record.RData},
@@ -246,18 +225,21 @@ func recordToEndpoint(record *anxcloudDns.Record) *endpoint.Endpoint {
 func (p *Provider) ApplyChanges(ctx context.Context, changes *plan.Changes) error {
 	epToCreate, epToDelete := GetCreateDeleteSetsFromChanges(changes)
 	log.Debugf("apply changes, create: %d, delete: %d", len(epToCreate), len(epToDelete))
-
+	allZones, err := p.client.GetZones(ctx)
+	if err != nil {
+		return fmt.Errorf("failed to get all dns zones during apply: %w", err)
+	}
+	if len(allZones) == 0 {
+		log.Warnf("did not retrieve any dns zones")
+		return nil
+	}
 	recordsToDelete := make([]*anxcloudDns.Record, 0)
 	for _, ep := range epToDelete {
 		if p.domainFilter.IsConfigured() && !p.domainFilter.Match(ep.DNSName) {
 			log.Debugf("Skipping record %s because it was filtered out by the domain filter", ep.DNSName)
 			continue
 		}
-		potentialZones, err := p.client.GetZonesByDomainName(ctx, ep.DNSName)
-		if err != nil {
-			log.Errorf("failed to get zones for domain %s: %v", ep.DNSName, err)
-			break
-		}
+		potentialZones := FilterZonesByDomainName(allZones, ep.DNSName)
 		for _, zone := range potentialZones {
 			recordName := strings.TrimSuffix(ep.DNSName, "."+zone.Name)
 			records, err := p.client.GetRecordsByZoneNameAndName(ctx, zone.Name, recordName)
@@ -280,7 +262,7 @@ func (p *Provider) ApplyChanges(ctx context.Context, changes *plan.Changes) erro
 	}
 
 	for _, record := range recordsToDelete {
-		if err := p.client.DeleteRecord(ctx, record.ZoneName, record.Identifier); err != nil {
+		if err := p.client.DeleteRecord(ctx, record); err != nil {
 			return fmt.Errorf("failed to delete record %v: %w", record, err)
 		}
 	}
@@ -291,11 +273,8 @@ func (p *Provider) ApplyChanges(ctx context.Context, changes *plan.Changes) erro
 			log.Debugf("Skipping record %s because it was filtered out by the domain filter", ep.DNSName)
 			continue
 		}
-		zone, err := p.client.GetZonesByDomainName(ctx, ep.DNSName)
-		if err != nil {
-			log.Errorf("failed to get zones for domain %s: %v", ep.DNSName, err)
-			break
-		}
+		zone := FilterZonesByDomainName(allZones, ep.DNSName)
+
 		if len(zone) == 0 {
 			log.Warnf("no zone found for domain %s", ep.DNSName)
 			continue
@@ -312,10 +291,27 @@ func (p *Provider) ApplyChanges(ctx context.Context, changes *plan.Changes) erro
 	}
 
 	for _, record := range recordsToCreate {
-		if err := p.client.CreateRecord(ctx, record.ZoneName, record); err != nil {
+		if err := p.client.CreateRecord(ctx, record); err != nil {
 			return fmt.Errorf("failed to create record %v: %w", record, err)
 		}
 	}
 
 	return nil
+}
+
+func FilterZonesByDomainName(zones []*anxcloudDns.Zone, domainName string) []*anxcloudDns.Zone {
+	possibleZones := make([]*anxcloudDns.Zone, 0)
+	for _, zone := range zones {
+		if strings.HasSuffix(domainName, zone.Name) {
+			possibleZones = append(possibleZones, zone)
+		}
+	}
+
+	// sort zones by length, longest first
+	// this is necessary because the domain name might match multiple zones
+	// and we want to use the most specific one
+	sort.Slice(possibleZones, func(i, j int) bool {
+		return len(possibleZones[i].Name) > len(possibleZones[j].Name)
+	})
+	return possibleZones
 }

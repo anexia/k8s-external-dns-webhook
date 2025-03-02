@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
-	"strings"
 	"testing"
 
 	env "github.com/caarlos0/env/v11"
@@ -89,9 +88,9 @@ func TestRecords(t *testing.T) {
 			name: "records mapped to same endpoint",
 			givenRecords: createRecordSlice(3, func(i int) (string, string, string, int, string) {
 				if i < 2 {
-					return "", "a.de", "A", 300, fmt.Sprintf("%d.%d.%d.%d", i+1, i+1, i+1, i+1)
+					return "a", "de", "A", 300, fmt.Sprintf("%d.%d.%d.%d", i+1, i+1, i+1, i+1)
 				}
-				return "", "c.de", "A", 300, fmt.Sprintf("%d.%d.%d.%d", i+1, i+1, i+1, i+1)
+				return "c", "de", "A", 300, fmt.Sprintf("%d.%d.%d.%d", i+1, i+1, i+1, i+1)
 			}),
 			expectedEndpoints: createEndpointSlice(2, func(i int) (string, string, endpoint.TTL, []string) {
 				if i == 0 {
@@ -395,9 +394,11 @@ func TestApplyChanges(t *testing.T) {
 
 			for zoneName, expectedDeletedRecordIDs := range tc.expectedRecordsDeleted {
 				require.Len(t, mockDNSClient.deletedRecords[zoneName], len(expectedDeletedRecordIDs), "deleted records in zone '%s' do not fit", zoneName)
-				actualDeletedRecordIDs, ok := mockDNSClient.deletedRecords[zoneName]
+				actualDeletedRecord, ok := mockDNSClient.deletedRecords[zoneName]
 				require.True(t, ok)
-				assert.ElementsMatch(t, expectedDeletedRecordIDs, actualDeletedRecordIDs)
+				for i, expectedDeletedRecordID := range expectedDeletedRecordIDs {
+					require.Equal(t, expectedDeletedRecordID, actualDeletedRecord[i].Identifier)
+				}
 			}
 		})
 	}
@@ -418,7 +419,7 @@ type mockDNSClient struct {
 	zoneRecords    map[string][]*anxcloudDns.Record
 	allZones       []*anxcloudDns.Zone
 	createdRecords map[string][]*anxcloudDns.Record // zoneName -> recordCreates
-	deletedRecords map[string][]string              // zoneName -> recordIDs
+	deletedRecords map[string][]*anxcloudDns.Record // zoneName -> recordIDs
 }
 
 func (c *mockDNSClient) GetRecords(_ context.Context) ([]*anxcloudDns.Record, error) {
@@ -455,32 +456,21 @@ func (c *mockDNSClient) GetZones(_ context.Context) ([]*anxcloudDns.Zone, error)
 	return c.allZones, c.returnError
 }
 
-func (c *mockDNSClient) GetZonesByDomainName(_ context.Context, domainName string) ([]*anxcloudDns.Zone, error) {
-	log.Debugf("GetZonesByDomainName called with domainName %s", domainName)
-	result := make([]*anxcloudDns.Zone, 0)
-	for _, zone := range c.allZones {
-		if strings.HasSuffix(domainName, zone.Name) {
-			result = append(result, zone)
-		}
-	}
-	return result, c.returnError
-}
-
-func (c *mockDNSClient) CreateRecord(_ context.Context, zoneName string, record *anxcloudDns.Record) error {
-	log.Debugf("CreateRecord called with zoneName %s and record %v", zoneName, record)
+func (c *mockDNSClient) CreateRecord(_ context.Context, record *anxcloudDns.Record) error {
+	log.Debugf("CreateRecord called for record %v", record)
 	if c.createdRecords == nil {
 		c.createdRecords = make(map[string][]*anxcloudDns.Record)
 	}
-	c.createdRecords[zoneName] = append(c.createdRecords[zoneName], record)
+	c.createdRecords[record.ZoneName] = append(c.createdRecords[record.ZoneName], record)
 	return c.returnError
 }
 
-func (c *mockDNSClient) DeleteRecord(_ context.Context, zoneName string, recordID string) error {
-	log.Debugf("DeleteRecord called with zoneName %s and recordID %s", zoneName, recordID)
+func (c *mockDNSClient) DeleteRecord(_ context.Context, record *anxcloudDns.Record) error {
+	log.Debugf("DeleteRecord called for record %v", record)
 	if c.deletedRecords == nil {
-		c.deletedRecords = make(map[string][]string)
+		c.deletedRecords = make(map[string][]*anxcloudDns.Record)
 	}
-	c.deletedRecords[zoneName] = append(c.deletedRecords[zoneName], recordID)
+	c.deletedRecords[record.ZoneName] = append(c.deletedRecords[record.ZoneName], record)
 	return c.returnError
 }
 

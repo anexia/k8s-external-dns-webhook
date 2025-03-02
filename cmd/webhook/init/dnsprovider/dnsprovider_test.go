@@ -28,8 +28,10 @@ func TestInit(t *testing.T) {
 		{
 			name: "domain filter config for anexia provider",
 			config: configuration.Config{
-				DomainFilter:   []string{"domain.com"},
-				ExcludeDomains: []string{"sub.domain.com"},
+				DomainFilter:         []string{"domain.com"},
+				ExcludeDomains:       []string{"sub.domain.com"},
+				RegexDomainFilter:    ".*regex.com",
+				RegexDomainExclusion: ".*.exclude.regex.com",
 			},
 			env: map[string]string{
 				"ANEXIA_API_TOKEN": "token",
