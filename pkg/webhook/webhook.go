@@ -7,7 +7,6 @@ import (
 	"net/http"
 
 	log "github.com/sirupsen/logrus"
-
 	"sigs.k8s.io/external-dns/endpoint"
 	"sigs.k8s.io/external-dns/plan"
 	"sigs.k8s.io/external-dns/provider"
@@ -24,18 +23,18 @@ const (
 	logFieldError         = "error"
 )
 
-// Webhook for external dns provider
+// Webhook for external dns provider.
 type Webhook struct {
 	provider provider.Provider
 }
 
-// New creates a new instance of the Webhook
+// New creates a new instance of the Webhook.
 func New(provider provider.Provider) *Webhook {
 	p := Webhook{provider: provider}
 	return &p
 }
 
-// Health handles the health request
+// Health handles the health request.
 func Health(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if r.URL.Path == healthPath {
@@ -104,7 +103,7 @@ func (p *Webhook) headerCheck(isContentType bool, w http.ResponseWriter, r *http
 	return nil
 }
 
-// Records handles the get request for records
+// Records handles the get request for records.
 func (p *Webhook) Records(w http.ResponseWriter, r *http.Request) {
 	if err := p.acceptHeaderCheck(w, r); err != nil {
 		requestLog(r).WithField(logFieldError, err).Error("accept header check failed")
@@ -131,7 +130,7 @@ func (p *Webhook) Records(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// ApplyChanges handles the post request for record changes
+// ApplyChanges handles the post request for record changes.
 func (p *Webhook) ApplyChanges(w http.ResponseWriter, r *http.Request) {
 	if err := p.contentTypeHeaderCheck(w, r); err != nil {
 		requestLog(r).WithField(logFieldError, err).Error("content type header check failed")
@@ -144,7 +143,7 @@ func (p *Webhook) ApplyChanges(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set(contentTypeHeader, contentTypePlaintext)
 		w.WriteHeader(http.StatusBadRequest)
 
-		errMsg := fmt.Sprintf("error decoding changes: %s", err.Error())
+		errMsg := "error decoding changes: " + err.Error()
 		if _, writeError := fmt.Fprint(w, errMsg); writeError != nil {
 			requestLog(r).WithField(logFieldError, writeError).Fatalf("error writing error message to response writer")
 		}
@@ -162,7 +161,7 @@ func (p *Webhook) ApplyChanges(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusNoContent)
 }
 
-// AdjustEndpoints handles the post request for adjusting endpoints
+// AdjustEndpoints handles the post request for adjusting endpoints.
 func (p *Webhook) AdjustEndpoints(w http.ResponseWriter, r *http.Request) {
 	if err := p.contentTypeHeaderCheck(w, r); err != nil {
 		log.Errorf("content type header check failed, request method: %s, request path: %s", r.Method, r.URL.Path)

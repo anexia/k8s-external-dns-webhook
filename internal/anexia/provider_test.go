@@ -2,19 +2,20 @@ package anexia
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"math/rand"
+	"strconv"
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
-	"sigs.k8s.io/external-dns/endpoint"
-	"sigs.k8s.io/external-dns/plan"
-
 	env "github.com/caarlos0/env/v11"
 	log "github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 	anxcloudDns "go.anx.io/go-anxcloud/pkg/apis/clouddns/v1"
+	"sigs.k8s.io/external-dns/endpoint"
+	"sigs.k8s.io/external-dns/plan"
 )
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
@@ -29,13 +30,13 @@ func TestNewProvider(t *testing.T) {
 	domainFilter := endpoint.NewDomainFilter([]string{"a.de."})
 	p, err := NewProvider(anexiaConfig, domainFilter)
 	require.NoError(t, err)
-	require.Equal(t, true, p.domainFilter.IsConfigured())
-	require.Equal(t, false, p.domainFilter.Match("b.de."))
+	require.True(t, p.domainFilter.IsConfigured())
+	require.False(t, p.domainFilter.Match("b.de."))
 }
 
 func TestRecords(t *testing.T) {
 	log.SetLevel(log.DebugLevel)
-	ctx := context.Background()
+	ctx := t.Context()
 	testCases := []struct {
 		name              string
 		givenRecords      []*anxcloudDns.Record
@@ -52,36 +53,36 @@ func TestRecords(t *testing.T) {
 		{
 			name:              "error reading records",
 			givenRecords:      []*anxcloudDns.Record{},
-			givenError:        fmt.Errorf("test error"),
+			givenError:        errors.New("test error"),
 			expectedEndpoints: []*endpoint.Endpoint{},
-			expectedError:     fmt.Errorf("test error"),
+			expectedError:     fmt.Errorf("failed to get records: %w", errors.New("test error")),
 		},
 		{
 			name: "multiple A records",
 			givenRecords: createRecordSlice(3, func(i int) (string, string, string, int, string) {
-				recordName := "a" + fmt.Sprintf("%d", i+1)
+				recordName := "a" + strconv.Itoa(i+1)
 				zoneName := "a.de"
 				return recordName, zoneName, "A", ((i + 1) * 100), fmt.Sprintf("%d.%d.%d.%d", i+1, i+1, i+1, i+1)
 			}),
 			expectedEndpoints: createEndpointSlice(3, func(i int) (string, string, endpoint.TTL, []string) {
-				return "a" + fmt.Sprintf("%d", i+1) + ".a.de", "A", endpoint.TTL((i + 1) * 100), []string{fmt.Sprintf("%d.%d.%d.%d", i+1, i+1, i+1, i+1)}
+				return "a" + strconv.Itoa(i+1) + ".a.de", "A", endpoint.TTL((i + 1) * 100), []string{fmt.Sprintf("%d.%d.%d.%d", i+1, i+1, i+1, i+1)}
 			}),
 		},
 		{
 			name: "multiple records filtered by domain",
 			givenRecords: createRecordSlice(6, func(i int) (string, string, string, int, string) {
 				if i < 3 {
-					recordName := "a" + fmt.Sprintf("%d", i+1)
+					recordName := "a" + strconv.Itoa(i+1)
 					zoneName := "a.de"
 					return recordName, zoneName, "A", ((i + 1) * 100), fmt.Sprintf("%d.%d.%d.%d", i+1, i+1, i+1, i+1)
 				}
-				recordName := "b" + fmt.Sprintf("%d", i+1)
+				recordName := "b" + strconv.Itoa(i+1)
 				zoneName := "b.de"
 				return recordName, zoneName, "A", ((i + 1) * 100), fmt.Sprintf("%d.%d.%d.%d", i+1, i+1, i+1, i+1)
 			}),
 			givenDomainFilter: endpoint.NewDomainFilter([]string{"a.de"}),
 			expectedEndpoints: createEndpointSlice(3, func(i int) (string, string, endpoint.TTL, []string) {
-				return "a" + fmt.Sprintf("%d", i+1) + ".a.de", "A", endpoint.TTL((i + 1) * 100), []string{fmt.Sprintf("%d.%d.%d.%d", i+1, i+1, i+1, i+1)}
+				return "a" + strconv.Itoa(i+1) + ".a.de", "A", endpoint.TTL((i + 1) * 100), []string{fmt.Sprintf("%d.%d.%d.%d", i+1, i+1, i+1, i+1)}
 			}),
 		},
 		{
@@ -91,7 +92,6 @@ func TestRecords(t *testing.T) {
 					return "", "a.de", "A", 300, fmt.Sprintf("%d.%d.%d.%d", i+1, i+1, i+1, i+1)
 				}
 				return "", "c.de", "A", 300, fmt.Sprintf("%d.%d.%d.%d", i+1, i+1, i+1, i+1)
-
 			}),
 			expectedEndpoints: createEndpointSlice(2, func(i int) (string, string, endpoint.TTL, []string) {
 				if i == 0 {
@@ -126,7 +126,7 @@ func TestApplyChanges(t *testing.T) {
 	log.SetReportCaller(true)
 	deZoneName := "de"
 	comZoneName := "com"
-	ctx := context.Background()
+	ctx := t.Context()
 	testCases := []struct {
 		name                   string
 		givenRecords           []*anxcloudDns.Record
@@ -249,7 +249,6 @@ func TestApplyChanges(t *testing.T) {
 					return deZoneName
 				}
 				return comZoneName
-
 			}),
 			givenZoneRecords: map[string][]*anxcloudDns.Record{
 				deZoneName: createRecordSlice(2, func(n int) (string, string, string, int, string) {
@@ -257,7 +256,6 @@ func TestApplyChanges(t *testing.T) {
 						return "a", deZoneName, "A", 300, "1.2.3.4"
 					}
 					return "a", deZoneName, "A", 300, "5.6.7.8"
-
 				}),
 				comZoneName: createRecordSlice(1, func(_ int) (string, string, string, int, string) {
 					return "a", comZoneName, "A", 300, "11.22.33.44"
@@ -269,7 +267,6 @@ func TestApplyChanges(t *testing.T) {
 						return "a.de", "A", endpoint.TTL(300), []string{"1.2.3.4", "5.6.7.8"}
 					}
 					return "a.com", "A", endpoint.TTL(300), []string{"11.22.33.44"}
-
 				}),
 			},
 			expectedRecordsDeleted: map[string][]string{
@@ -497,7 +494,7 @@ func RandStringRunes(n int) string {
 
 func createRecordSlice(count int, modifier func(int) (string, string, string, int, string)) []*anxcloudDns.Record {
 	records := make([]*anxcloudDns.Record, count)
-	for i := 0; i < count; i++ {
+	for i := range count {
 		name, zone, typ, ttl, target := modifier(i)
 		records[i] = &anxcloudDns.Record{
 			Name:       name,
@@ -505,7 +502,7 @@ func createRecordSlice(count int, modifier func(int) (string, string, string, in
 			TTL:        ttl,
 			ZoneName:   zone,
 			RData:      target,
-			Identifier: fmt.Sprintf("%d", i),
+			Identifier: strconv.Itoa(i),
 		}
 	}
 	return records
@@ -513,7 +510,7 @@ func createRecordSlice(count int, modifier func(int) (string, string, string, in
 
 func createEndpointSlice(count int, modifier func(int) (string, string, endpoint.TTL, []string)) []*endpoint.Endpoint {
 	endpoints := make([]*endpoint.Endpoint, count)
-	for i := 0; i < count; i++ {
+	for i := range count {
 		name, typ, ttl, targets := modifier(i)
 		endpoints[i] = &endpoint.Endpoint{
 			DNSName:    name,
@@ -527,7 +524,7 @@ func createEndpointSlice(count int, modifier func(int) (string, string, endpoint
 
 func createZoneSlice(count int, modifier func(int) string) []*anxcloudDns.Zone {
 	zones := make([]*anxcloudDns.Zone, count)
-	for i := 0; i < count; i++ {
+	for i := range count {
 		zoneName := modifier(i)
 		zones[i] = &anxcloudDns.Zone{
 			Name: zoneName,

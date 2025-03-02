@@ -6,11 +6,11 @@ import (
 )
 
 func GetCreateDeleteSetsFromChanges(changes *plan.Changes) ([]*endpoint.Endpoint, []*endpoint.Endpoint) {
-	toCreate := make([]*endpoint.Endpoint, len(changes.Create))
-	copy(toCreate, changes.Create)
+	toCreate := make([]*endpoint.Endpoint, 0, len(changes.Create)+len(changes.UpdateNew))
+	toDelete := make([]*endpoint.Endpoint, 0, len(changes.Delete)+len(changes.UpdateOld))
 
-	toDelete := make([]*endpoint.Endpoint, len(changes.Delete))
-	copy(toDelete, changes.Delete)
+	toCreate = append(toCreate, changes.Create...)
+	toDelete = append(toDelete, changes.Delete...)
 
 	for i, updateOldEndpoint := range changes.UpdateOld {
 		updateNewEndpoint := changes.UpdateNew[i]

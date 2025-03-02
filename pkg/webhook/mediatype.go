@@ -37,5 +37,5 @@ func checkAndGetMediaTypeHeaderValue(value string) (string, error) {
 		}
 		supportedMediaTypesString += string(mediaTypeVersion(v)) + sep
 	}
-	return "", fmt.Errorf("Unsupported media type version: '%s'. Supported media types are: '%s'", value, supportedMediaTypesString)
+	return "", fmt.Errorf("unsupported media type version: '%s'. Supported media types are: '%s'", value, supportedMediaTypesString)
 }

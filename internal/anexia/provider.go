@@ -36,7 +36,7 @@ func (c *DNSClient) GetZones(ctx context.Context) ([]*anxcloudDns.Zone, error) {
 
 	if err := c.client.List(ctx, &anxcloudDns.Zone{}, api.ObjectChannel(&channel)); err != nil {
 		log.Errorf("failed to list zones: %v", err)
-		return nil, err
+		return nil, fmt.Errorf("failed to list zones while getting all zones: %w", err)
 	}
 
 	zone := anxcloudDns.Zone{}
@@ -45,7 +45,7 @@ func (c *DNSClient) GetZones(ctx context.Context) ([]*anxcloudDns.Zone, error) {
 	for res := range channel {
 		if err := res(&zone); err != nil {
 			log.Errorf("failed to parse zone: %v", err)
-			return nil, err
+			return nil, fmt.Errorf("failed to parse zone: %w", err)
 		}
 		zones = append(zones, &zone)
 	}
@@ -60,7 +60,7 @@ func (c *DNSClient) GetRecords(ctx context.Context) ([]*anxcloudDns.Record, erro
 	allZones, err := c.GetZones(ctx)
 	if err != nil {
 		log.Errorf("failed to get zones: %v", err)
-		return nil, err
+		return nil, fmt.Errorf("failed to get zones: %w", err)
 	}
 
 	for _, zone := range allZones {
@@ -69,7 +69,7 @@ func (c *DNSClient) GetRecords(ctx context.Context) ([]*anxcloudDns.Record, erro
 
 		if err := c.client.List(ctx, &anxcloudDns.Record{ZoneName: zoneName}, api.ObjectChannel(&channel)); err != nil {
 			log.Errorf("failed to list records for zone %s: %v", zoneName, err)
-			return nil, err
+			return nil, fmt.Errorf("failed to list records for zone %s: %w", zoneName, err)
 		}
 	}
 
@@ -78,7 +78,7 @@ func (c *DNSClient) GetRecords(ctx context.Context) ([]*anxcloudDns.Record, erro
 		record := anxcloudDns.Record{}
 		if err := res(&record); err != nil {
 			log.Errorf("failed to parse record: %v", err)
-			return nil, err
+			return nil, fmt.Errorf("failed to parse record: %w", err)
 		}
 		records = append(records, &record)
 	}
@@ -92,7 +92,7 @@ func (c *DNSClient) GetRecordsByZoneNameAndName(ctx context.Context, zoneName, n
 
 	if err := c.client.List(ctx, &anxcloudDns.Record{ZoneName: zoneName, Name: name}, api.ObjectChannel(&channel)); err != nil {
 		log.Errorf("failed to list records for zone %s and name %s: %v", zoneName, name, err)
-		return nil, err
+		return nil, fmt.Errorf("failed to list records for zone %s and name %s: %w", zoneName, name, err)
 	}
 
 	record := anxcloudDns.Record{}
@@ -101,7 +101,7 @@ func (c *DNSClient) GetRecordsByZoneNameAndName(ctx context.Context, zoneName, n
 	for res := range channel {
 		if err := res(&record); err != nil {
 			log.Errorf("failed to parse record: %v", err)
-			return nil, err
+			return nil, fmt.Errorf("failed to parse record: %w", err)
 		}
 		records = append(records, &record)
 	}
@@ -113,7 +113,7 @@ func (c *DNSClient) GetZonesByDomainName(ctx context.Context, domainName string)
 	log.Debugf("get zones for domain %s ...", domainName)
 	allZones, err := c.GetZones(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to get zones: %w", err)
 	}
 	possibleZones := make([]*anxcloudDns.Zone, 0)
 	for _, zone := range allZones {
@@ -140,7 +140,7 @@ func (c *DNSClient) DeleteRecord(ctx context.Context, zoneName, recordID string)
 	err := c.client.Destroy(ctx, &anxcloudDns.Record{ZoneName: zoneName, Identifier: recordID})
 	if err != nil {
 		log.Errorf("failed to delete record %s: %v", recordID, err)
-		return err
+		return fmt.Errorf("failed to delete record %s: %w", recordID, err)
 	}
 	log.Debug("record deleted")
 	return nil
@@ -155,7 +155,7 @@ func (c *DNSClient) CreateRecord(ctx context.Context, _ string, record *anxcloud
 	err := c.client.Create(ctx, record)
 	if err != nil {
 		log.Errorf("failed to create record %v: %v", record, err)
-		return err
+		return fmt.Errorf("failed to create record %v: %w", record, err)
 	}
 	log.Debug("record created")
 	return nil
@@ -167,7 +167,7 @@ type Provider struct {
 	domainFilter endpoint.DomainFilter
 }
 
-// NewProvider returns an instance of new provider
+// NewProvider returns an instance of new provider.
 func NewProvider(configuration *Configuration, domainFilter endpoint.DomainFilter) (*Provider, error) {
 	client, err := createClient(configuration)
 	if err != nil {
@@ -180,7 +180,7 @@ func NewProvider(configuration *Configuration, domainFilter endpoint.DomainFilte
 	return prov, nil
 }
 
-func createClient(configuration *Configuration) (apiClient types.API, err error) {
+func createClient(configuration *Configuration) (types.API, error) {
 	options := []client.Option{
 		client.TokenFromString(configuration.APIToken),
 	}
@@ -191,14 +191,14 @@ func createClient(configuration *Configuration) (apiClient types.API, err error)
 		log.Debugf("Creating Anexia client with base URL %s", configuration.APIEndpointURL)
 		options = append(options, client.BaseURL(configuration.APIEndpointURL))
 	}
-	apiClient, err = api.NewAPI(
+	apiClient, err := api.NewAPI(
 		api.WithClientOptions(
 			options...,
 		),
 	)
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to create Anexia client: %w", err)
 	}
 	if configuration.DryRun {
 		log.Warnf("Dry run mode enabled, no changes will be made")
@@ -209,7 +209,7 @@ func createClient(configuration *Configuration) (apiClient types.API, err error)
 func (p *Provider) Records(ctx context.Context) ([]*endpoint.Endpoint, error) {
 	records, err := p.client.GetRecords(ctx)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("failed to get records: %w", err)
 	}
 
 	groups := make(map[string][]*endpoint.Endpoint, 0)
@@ -239,14 +239,12 @@ func (p *Provider) Records(ctx context.Context) ([]*endpoint.Endpoint, error) {
 }
 
 func recordToEndpoint(record *anxcloudDns.Record) *endpoint.Endpoint {
-
 	return &endpoint.Endpoint{
 		DNSName: func() string {
 			if record.Name == "@" || record.Name == "" {
 				return record.ZoneName
 			}
 			return record.Name + "." + record.ZoneName
-
 		}(),
 		RecordTTL:  endpoint.TTL(record.TTL),
 		RecordType: record.Type,
@@ -292,7 +290,7 @@ func (p *Provider) ApplyChanges(ctx context.Context, changes *plan.Changes) erro
 
 	for _, record := range recordsToDelete {
 		if err := p.client.DeleteRecord(ctx, record.ZoneName, record.Identifier); err != nil {
-			return err
+			return fmt.Errorf("failed to delete record %v: %w", record, err)
 		}
 	}
 
@@ -324,10 +322,9 @@ func (p *Provider) ApplyChanges(ctx context.Context, changes *plan.Changes) erro
 
 	for _, record := range recordsToCreate {
 		if err := p.client.CreateRecord(ctx, record.ZoneName, record); err != nil {
-			return err
+			return fmt.Errorf("failed to create record %v: %w", record, err)
 		}
 	}
 
 	return nil
-
 }

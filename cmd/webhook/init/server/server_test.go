@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -98,11 +99,11 @@ func TestRecords(t *testing.T) {
 			expectedResponseHeaders: map[string]string{
 				"Content-Type": "text/plain",
 			},
-			expectedBody: "Client must provide a valid versioned media type in the accept header: Unsupported media type version: 'invalid'. Supported media types are: 'application/external.dns.webhook+json;version=1'",
+			expectedBody: "Client must provide a valid versioned media type in the accept header: unsupported media type version: 'invalid'. Supported media types are: 'application/external.dns.webhook+json;version=1'",
 		},
 		{
 			name:               "backend error",
-			hasError:           fmt.Errorf("backend error"),
+			hasError:           errors.New("backend error"),
 			method:             http.MethodGet,
 			headers:            map[string]string{"Accept": "application/external.dns.webhook+json;version=1"},
 			path:               "/records",
@@ -243,7 +244,7 @@ func TestApplyChanges(t *testing.T) {
 			expectedResponseHeaders: map[string]string{
 				"Content-Type": "text/plain",
 			},
-			expectedBody: "Client must provide a valid versioned media type in the content type: Unsupported media type version: 'invalid'. Supported media types are: 'application/external.dns.webhook+json;version=1'",
+			expectedBody: "Client must provide a valid versioned media type in the content type: unsupported media type version: 'invalid'. Supported media types are: 'application/external.dns.webhook+json;version=1'",
 		},
 		{
 			name:   "invalid json",
@@ -262,7 +263,7 @@ func TestApplyChanges(t *testing.T) {
 		},
 		{
 			name:     "backend error",
-			hasError: fmt.Errorf("backend error"),
+			hasError: errors.New("backend error"),
 			method:   http.MethodPost,
 			headers: map[string]string{
 				"Content-Type": "application/external.dns.webhook+json;version=1",
@@ -370,7 +371,7 @@ func TestAdjustEndpoints(t *testing.T) {
 			expectedResponseHeaders: map[string]string{
 				"Content-Type": "text/plain",
 			},
-			expectedBody: "Client must provide a valid versioned media type in the content type: Unsupported media type version: 'invalid'. Supported media types are: 'application/external.dns.webhook+json;version=1'",
+			expectedBody: "Client must provide a valid versioned media type in the content type: unsupported media type version: 'invalid'. Supported media types are: 'application/external.dns.webhook+json;version=1'",
 		},
 		{
 			name:   "no accept header",
@@ -399,7 +400,7 @@ func TestAdjustEndpoints(t *testing.T) {
 			expectedResponseHeaders: map[string]string{
 				"Content-Type": "text/plain",
 			},
-			expectedBody: "Client must provide a valid versioned media type in the accept header: Unsupported media type version: 'invalid'. Supported media types are: 'application/external.dns.webhook+json;version=1'",
+			expectedBody: "Client must provide a valid versioned media type in the accept header: unsupported media type version: 'invalid'. Supported media types are: 'application/external.dns.webhook+json;version=1'",
 		},
 		{
 			name:   "invalid json",
@@ -458,7 +459,7 @@ func TestNegotiate(t *testing.T) {
 			expectedResponseHeaders: map[string]string{
 				"Content-Type": "text/plain",
 			},
-			expectedBody: "Client must provide a valid versioned media type in the accept header: Unsupported media type version: 'invalid'. Supported media types are: 'application/external.dns.webhook+json;version=1'",
+			expectedBody: "Client must provide a valid versioned media type in the accept header: unsupported media type version: 'invalid'. Supported media types are: 'application/external.dns.webhook+json;version=1'",
 		},
 	}
 
@@ -475,7 +476,7 @@ func executeTestCases(t *testing.T, testCases []testCase) {
 
 			var bodyReader io.Reader = strings.NewReader(tc.body)
 
-			request, err := http.NewRequest(tc.method, "http://localhost:8888"+tc.path, bodyReader)
+			request, err := http.NewRequestWithContext(t.Context(), tc.method, "http://localhost:8888"+tc.path, bodyReader)
 			if err != nil {
 				t.Error(err)
 			}

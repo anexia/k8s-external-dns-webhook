@@ -5,13 +5,12 @@ import (
 	"regexp"
 	"strings"
 
+	env "github.com/caarlos0/env/v11"
+	log "github.com/sirupsen/logrus"
 	"go.anx.io/external-dns-webhook/cmd/webhook/init/configuration"
 	"go.anx.io/external-dns-webhook/internal/anexia"
 	"sigs.k8s.io/external-dns/endpoint"
 	"sigs.k8s.io/external-dns/provider"
-
-	env "github.com/caarlos0/env/v11"
-	log "github.com/sirupsen/logrus"
 )
 
 func Init(config configuration.Config) (provider.Provider, error) {
@@ -45,8 +44,13 @@ func Init(config configuration.Config) (provider.Provider, error) {
 
 	anexiaConfig := anexia.Configuration{}
 	if err := env.Parse(&anexiaConfig); err != nil {
-		return nil, fmt.Errorf("reading anexia configuration failed: %v", err)
+		return nil, fmt.Errorf("reading anexia configuration failed: %w", err)
 	}
 
-	return anexia.NewProvider(&anexiaConfig, domainFilter)
+	provider, err := anexia.NewProvider(&anexiaConfig, domainFilter)
+	if err != nil {
+		return nil, fmt.Errorf("creating anexia provider failed: %w", err)
+	}
+
+	return provider, nil
 }
