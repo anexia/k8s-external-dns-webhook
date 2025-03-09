@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.2.1](https://github.com/anexia/k8s-external-dns-webhook/compare/v0.2.0...v0.2.1) (2025-03-09)
+
+
+### Miscellaneous Chores
+
+* **ci:** cleanup the PR workflow ([64ddd66](https://github.com/anexia/k8s-external-dns-webhook/commit/64ddd66a79d1a7d7e8c8d8a34bcaa0e822cc5356))
+* **deps:** bump anchore/sbom-action from 0.17.7 to 0.17.8 ([#52](https://github.com/anexia/k8s-external-dns-webhook/issues/52)) ([4f5bda0](https://github.com/anexia/k8s-external-dns-webhook/commit/4f5bda0fe19cbc69022d0d88580411777ec30ed4))
+* **deps:** bump anchore/sbom-action from 0.17.8 to 0.17.9 ([#62](https://github.com/anexia/k8s-external-dns-webhook/issues/62)) ([3c90699](https://github.com/anexia/k8s-external-dns-webhook/commit/3c90699df1b4afaa499d704278359fa0624808d7))
+* **deps:** bump anchore/sbom-action from 0.17.9 to 0.18.0 ([#67](https://github.com/anexia/k8s-external-dns-webhook/issues/67)) ([4a146ad](https://github.com/anexia/k8s-external-dns-webhook/commit/4a146ad646437764732d9942cfde2ef629ef872e))
+* **deps:** bump github.com/caarlos0/env/v11 from 11.2.2 to 11.3.1 ([#64](https://github.com/anexia/k8s-external-dns-webhook/issues/64)) ([62a67a4](https://github.com/anexia/k8s-external-dns-webhook/commit/62a67a40237fc3a73f3a586e77726ecdef2116e5))
+* **deps:** bump github.com/go-chi/chi/v5 from 5.1.0 to 5.2.0 ([#61](https://github.com/anexia/k8s-external-dns-webhook/issues/61)) ([b771dc5](https://github.com/anexia/k8s-external-dns-webhook/commit/b771dc5b213459f43559f13b183d60036cad1a8b))
+* **deps:** bump github.com/go-chi/chi/v5 from 5.2.0 to 5.2.1 ([#68](https://github.com/anexia/k8s-external-dns-webhook/issues/68)) ([4f3f50a](https://github.com/anexia/k8s-external-dns-webhook/commit/4f3f50a7ce5dbe401ddfe22e991b1b88a01b8e2f))
+* **deps:** bump go.anx.io/go-anxcloud from 0.7.6 to 0.7.7 ([#65](https://github.com/anexia/k8s-external-dns-webhook/issues/65)) ([8c45409](https://github.com/anexia/k8s-external-dns-webhook/commit/8c4540938c69d4abab9e1c9745bd50d1ef889459))
+* **deps:** bump go.anx.io/go-anxcloud from 0.7.7 to 0.7.8 ([#70](https://github.com/anexia/k8s-external-dns-webhook/issues/70)) ([f9e5de4](https://github.com/anexia/k8s-external-dns-webhook/commit/f9e5de4781a904f48448b36c99cf69096dc6f941))
+* **deps:** bump sigs.k8s.io/external-dns from 0.15.0 to 0.15.1 ([#63](https://github.com/anexia/k8s-external-dns-webhook/issues/63)) ([f89fe70](https://github.com/anexia/k8s-external-dns-webhook/commit/f89fe7063e8d4802f99d69c3954de9eb055993e6))
+* **deps:** bump sigstore/cosign-installer from 3.7.0 to 3.8.1 ([#71](https://github.com/anexia/k8s-external-dns-webhook/issues/71)) ([4519d18](https://github.com/anexia/k8s-external-dns-webhook/commit/4519d18c9a06ef9c7fa39b49b83dd0987e6b3aad))
+* enable auto-merge for dependabot updates ([8726220](https://github.com/anexia/k8s-external-dns-webhook/commit/8726220c4508af3d01702e77f97fccb9cd9af34d))
+* fix repository name in all *.md files ([#58](https://github.com/anexia/k8s-external-dns-webhook/issues/58)) ([d00d80c](https://github.com/anexia/k8s-external-dns-webhook/commit/d00d80c5608d8f86191f6340652eebd3e3baea69))
+* migrate goreleaser to newest configuration ([#57](https://github.com/anexia/k8s-external-dns-webhook/issues/57)) ([1652ccb](https://github.com/anexia/k8s-external-dns-webhook/commit/1652ccb3f1ec4ed33aa3b37f639550049916b926))
+* run go mod tidy ([#66](https://github.com/anexia/k8s-external-dns-webhook/issues/66)) ([2647ebf](https://github.com/anexia/k8s-external-dns-webhook/commit/2647ebfa2c09fd40bc353783d5183ad820c15f26))
+
 ## [0.2.0](https://github.com/anexia/k8s-external-dns-webhook/compare/v0.1.6...v0.2.0) (2024-12-04)
 
 :warning: As part of the migration to the Anexia organisation, the path to the container image changed!
