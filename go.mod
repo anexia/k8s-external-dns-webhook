@@ -10,7 +10,7 @@ require (
 	github.com/sirupsen/logrus v1.9.3
 	github.com/stretchr/testify v1.10.0
 	go.anx.io/go-anxcloud v0.7.8
-	sigs.k8s.io/external-dns v0.16.0
+	sigs.k8s.io/external-dns v0.16.1
 )
 
 require (
