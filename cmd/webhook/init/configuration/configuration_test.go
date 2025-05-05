@@ -19,8 +19,8 @@ func TestInit(t *testing.T) {
 	assert.Equal(t, 1*time.Second, cfg.ServerWriteTimeout)
 	assert.Equal(t, []string(nil), cfg.DomainFilter)
 	assert.Equal(t, []string(nil), cfg.ExcludeDomains)
-	assert.Equal(t, "", cfg.RegexDomainFilter)
-	assert.Equal(t, "", cfg.RegexDomainExclusion)
+	assert.Empty(t, cfg.RegexDomainFilter)
+	assert.Empty(t, cfg.RegexDomainExclusion)
 
 	t.Setenv("SERVER_HOST", "testhost")
 	t.Setenv("SERVER_PORT", "9999")
