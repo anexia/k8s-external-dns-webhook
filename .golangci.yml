@@ -1,3 +1,4 @@
+version: "2"
 linters:
   enable:
     - asasalint
@@ -8,25 +9,19 @@ linters:
     - copyloopvar
     - dupl
     - durationcheck
-    - errcheck
     - errname
     - errorlint
     - exhaustive
     - exptostd
     - fatcontext
-    - gci
     - gochecknoinits
     - gochecksumtype
     - gocritic
     - godot
     - goheader
-    - goimports
     - gomoddirectives
     - goprintffuncname
-    - gosimple
-    - govet
     - iface
-    - ineffassign
     - intrange
     - lll
     - loggercheck
@@ -50,22 +45,37 @@ linters:
     - revive
     - rowserrcheck
     - staticcheck
-    - stylecheck
     - testableexamples
     - testifylint
     - tparallel
-    - typecheck
     - unconvert
     - unparam
-    - unused
     - usestdlibvars
     - usetesting
     - wastedassign
     - whitespace
     - wrapcheck
-  enable-all: false
-linters-settings:
-  lll:
-    line-length: 250
-run:
-  timeout: 10m
+  settings:
+    lll:
+      line-length: 250
+  exclusions:
+    generated: lax
+    presets:
+      - comments
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gci
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$
