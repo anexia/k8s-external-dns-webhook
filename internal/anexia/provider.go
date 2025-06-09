@@ -35,7 +35,6 @@ func (c *DNSClient) GetZones(ctx context.Context) ([]*anxcloudDns.Zone, error) {
 
 	if err := c.client.List(ctx, &anxcloudDns.Zone{},
 		api.ObjectChannel(&channel),
-		api.FullObjects(true),
 	); err != nil {
 		return nil, fmt.Errorf("failed to list zones while getting all zones: %w", err)
 	}
@@ -67,7 +66,6 @@ func (c *DNSClient) GetRecords(ctx context.Context) ([]*anxcloudDns.Record, erro
 
 		if err := c.client.List(ctx, &anxcloudDns.Record{ZoneName: zoneName},
 			api.ObjectChannel(&channel),
-			api.FullObjects(true),
 		); err != nil {
 			return nil, fmt.Errorf("failed to list records for zone %s: %w", zoneName, err)
 		}
