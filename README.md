@@ -31,12 +31,6 @@ kubectl create secret generic anexia-credentials \
 # create the helm values file
 cat <<EOF > external-dns-anexia-values.yaml
 
-# -- Currently this image is only published to a private repository.
-global:
-  # -- Add a global image pull secret.
-  imagePullSecrets:
-    - name: ghcr-creds
-
 # -- ExternalDNS Log level.
 logLevel: debug # reduce in production
 
