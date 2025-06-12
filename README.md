@@ -46,12 +46,15 @@ sources:
 extraArgs:
   ## must override the default value with port 8888 with port 8080 because this is hard-coded in the helm chart
   - --webhook-provider-url=http://localhost:8080
+  ## You should filter the domains that can be requested to limit the amount of requests done to the anxia engine.
+  ## This will help you avoid running into rate limiting
+  - --domain-filter=your.domain.com
 
 provider:
   name: webhook
   webhook:
     image: ghcr.io/anexia/k8s-external-dns-webhook
-    tag: v0.1.6
+    tag: v0.2.0
     env:
       - name: LOG_LEVEL
         value: debug # reduce in production
@@ -64,6 +67,8 @@ provider:
             key: token
       - name: SERVER_HOST
         value: "0.0.0.0"
+      - name: SERVER_PORT
+        value: "8080"
       - name: DRY_RUN
         value: "false"
 EOF
