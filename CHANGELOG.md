@@ -1,5 +1,17 @@
 # Changelog
 
+## [0.2.3](https://github.com/anexia/k8s-external-dns-webhook/compare/v0.2.2...v0.2.3) (2025-06-12)
+
+
+### Bug Fixes
+
+* request only valid operations on the record resource ([#85](https://github.com/anexia/k8s-external-dns-webhook/issues/85)) ([42de5ac](https://github.com/anexia/k8s-external-dns-webhook/commit/42de5ac9f13a5bb0965fe01a7c2d13f50370ec03))
+
+
+### Miscellaneous Chores
+
+* **deps:** switch to googleapis/release-please-action ([#86](https://github.com/anexia/k8s-external-dns-webhook/issues/86)) ([3c83ee7](https://github.com/anexia/k8s-external-dns-webhook/commit/3c83ee7a592b6685c4fc0519d660d234a07a86af))
+
 ## [0.2.2](https://github.com/anexia/k8s-external-dns-webhook/compare/v0.2.1...v0.2.2) (2025-05-16)
 
 
