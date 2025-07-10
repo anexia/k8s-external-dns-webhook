@@ -22,7 +22,7 @@ type testCase struct {
 	name                      string
 	returnRecords             []*endpoint.Endpoint
 	returnAdjustedEndpoints   []*endpoint.Endpoint
-	returnDomainFilter        endpoint.DomainFilter
+	returnDomainFilter        endpoint.DomainFilterInterface
 	hasError                  error
 	method                    string
 	path                      string
