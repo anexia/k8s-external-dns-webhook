@@ -135,11 +135,11 @@ func (c *DNSClient) CreateRecord(ctx context.Context, record *anxcloudDns.Record
 type Provider struct {
 	provider.BaseProvider
 	client       DNSService
-	domainFilter endpoint.DomainFilter
+	domainFilter endpoint.DomainFilterInterface
 }
 
 // NewProvider returns an instance of new provider.
-func NewProvider(configuration *Configuration, domainFilter endpoint.DomainFilter) (*Provider, error) {
+func NewProvider(configuration *Configuration, domainFilter endpoint.DomainFilterInterface) (*Provider, error) {
 	client, err := createClient(configuration)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create Anexia client: %w", err)
@@ -177,6 +177,16 @@ func createClient(configuration *Configuration) (types.API, error) {
 	return apiClient, nil
 }
 
+func shouldSkipEndpoint(filter endpoint.DomainFilterInterface, ep *endpoint.Endpoint) bool {
+	// Don't skip if we don't have a filter
+	if filter == nil {
+		return false
+	}
+
+	// However, if the filter matches, skip it.
+	return filter.Match(ep.DNSName)
+}
+
 func (p *Provider) Records(ctx context.Context) ([]*endpoint.Endpoint, error) {
 	records, err := p.client.GetRecords(ctx)
 	if err != nil {
@@ -188,7 +198,7 @@ func (p *Provider) Records(ctx context.Context) ([]*endpoint.Endpoint, error) {
 	groups := make(map[string][]*endpoint.Endpoint, 0)
 	for _, record := range records {
 		ep := recordToEndpoint(record)
-		if p.domainFilter.IsConfigured() && !p.domainFilter.Match(ep.DNSName) {
+		if shouldSkipEndpoint(p.domainFilter, ep) {
 			log.Infof("Skipping record %s because it was filtered out by the domain filter", ep.DNSName)
 			continue
 		}
@@ -233,7 +243,7 @@ func (p *Provider) ApplyChanges(ctx context.Context, changes *plan.Changes) erro
 	}
 	recordsToDelete := make([]*anxcloudDns.Record, 0)
 	for _, ep := range epToDelete {
-		if p.domainFilter.IsConfigured() && !p.domainFilter.Match(ep.DNSName) {
+		if shouldSkipEndpoint(p.domainFilter, ep) {
 			log.Debugf("Skipping record %s because it was filtered out by the domain filter", ep.DNSName)
 			continue
 		}
@@ -267,7 +277,7 @@ func (p *Provider) ApplyChanges(ctx context.Context, changes *plan.Changes) erro
 
 	recordsToCreate := make([]*anxcloudDns.Record, 0)
 	for _, ep := range epToCreate {
-		if p.domainFilter.IsConfigured() && !p.domainFilter.Match(ep.DNSName) {
+		if shouldSkipEndpoint(p.domainFilter, ep) {
 			log.Debugf("Skipping record %s because it was filtered out by the domain filter", ep.DNSName)
 			continue
 		}

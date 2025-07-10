@@ -14,7 +14,7 @@ import (
 )
 
 func Init(config configuration.Config) (provider.Provider, error) {
-	var domainFilter endpoint.DomainFilter
+	var domainFilter endpoint.DomainFilterInterface
 	createMsg := "Creating anexia provider with "
 
 	if config.RegexDomainFilter != "" {

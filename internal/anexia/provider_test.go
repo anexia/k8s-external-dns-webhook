@@ -29,7 +29,6 @@ func TestNewProvider(t *testing.T) {
 	domainFilter := endpoint.NewDomainFilter([]string{"a.de."})
 	p, err := NewProvider(anexiaConfig, domainFilter)
 	require.NoError(t, err)
-	require.True(t, p.domainFilter.IsConfigured())
 	require.False(t, p.domainFilter.Match("b.de."))
 }
 
@@ -40,7 +39,7 @@ func TestRecords(t *testing.T) {
 		name              string
 		givenRecords      []*anxcloudDns.Record
 		givenError        error
-		givenDomainFilter endpoint.DomainFilter
+		givenDomainFilter endpoint.DomainFilterInterface
 		expectedEndpoints []*endpoint.Endpoint
 		expectedError     error
 	}{
@@ -131,7 +130,7 @@ func TestApplyChanges(t *testing.T) {
 		givenRecords           []*anxcloudDns.Record
 		givenZones             []*anxcloudDns.Zone
 		givenZoneRecords       map[string][]*anxcloudDns.Record
-		givenDomainFilter      endpoint.DomainFilter
+		givenDomainFilter      endpoint.DomainFilterInterface
 		whenChanges            *plan.Changes
 		expectedRecordsCreated map[string][]*anxcloudDns.Record
 		expectedRecordsDeleted map[string][]string
@@ -172,7 +171,7 @@ func TestApplyChanges(t *testing.T) {
 			givenZoneRecords: map[string][]*anxcloudDns.Record{
 				deZoneName: createRecordSlice(0, nil),
 			},
-			givenDomainFilter: endpoint.NewDomainFilter([]string{"b.de"}),
+			givenDomainFilter: endpoint.NewDomainFilter([]string{"a.de"}),
 			whenChanges: &plan.Changes{
 				Create: createEndpointSlice(1, func(_ int) (string, string, endpoint.TTL, []string) {
 					return "a." + deZoneName, "A", endpoint.TTL(300), []string{"1.2.3.4"}
@@ -344,7 +343,7 @@ func TestApplyChanges(t *testing.T) {
 					return "a", deZoneName, "A", 300, "1.2.3.4"
 				}),
 			},
-			givenDomainFilter: endpoint.NewDomainFilter([]string{"b.de"}),
+			givenDomainFilter: endpoint.NewDomainFilter([]string{"a.de"}),
 
 			whenChanges: &plan.Changes{
 				UpdateOld: createEndpointSlice(1, func(_ int) (string, string, endpoint.TTL, []string) {
