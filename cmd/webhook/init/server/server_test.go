@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/http/httptest"
 	"reflect"
 	"strings"
 	"testing"
@@ -37,16 +38,20 @@ type testCase struct {
 }
 
 var mockProvider *MockProvider
+var httpHandler http.Handler
 
 func TestMain(m *testing.M) {
 	mockProvider = &MockProvider{}
+	httpHandler = InitHandler(webhook.New(mockProvider))
 
-	srv := Init(configuration.Init(), webhook.New(mockProvider))
+	m.Run()
+}
+
+func TestInitAndServe(t *testing.T) {
+	srv := InitAndServe(configuration.Init(), webhook.New(mockProvider))
 	go ShutdownGracefully(srv)
 
 	time.Sleep(300 * time.Millisecond)
-
-	m.Run()
 	if err := srv.Shutdown(context.TODO()); err != nil {
 		panic(err)
 	}
@@ -476,19 +481,15 @@ func executeTestCases(t *testing.T, testCases []testCase) {
 
 			var bodyReader io.Reader = strings.NewReader(tc.body)
 
-			request, err := http.NewRequestWithContext(t.Context(), tc.method, "http://localhost:8888"+tc.path, bodyReader)
-			if err != nil {
-				t.Error(err)
-			}
+			request := httptest.NewRequestWithContext(t.Context(), tc.method, tc.path, bodyReader)
+			recorder := httptest.NewRecorder()
 
 			for k, v := range tc.headers {
 				request.Header.Set(k, v)
 			}
 
-			response, err := http.DefaultClient.Do(request)
-			if err != nil {
-				t.Error(err)
-			}
+			httpHandler.ServeHTTP(recorder, request)
+			response := recorder.Result()
 
 			if response.StatusCode != tc.expectedStatusCode {
 				t.Errorf("expected status code %d, got %d", tc.expectedStatusCode, response.StatusCode)
