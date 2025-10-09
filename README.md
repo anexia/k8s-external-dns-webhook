@@ -19,6 +19,8 @@ See [cmd/webhook/init/configuration/configuration.go](cmd/webhook/init/configura
 
 The Anexia Webhook Provider is provided as  an OCI image in [ghcr.io/anexia/k8s-external-dns-webhook](https://ghcr.io/anexia/k8s-external-dns-webhook).
 
+A full tutorial of the ExternalDNS in combination with Anexia CloudDNS can be viewed in the [official ExternalDNS tutorials](https://kubernetes-sigs.github.io/external-dns/latest/docs/tutorials/anexia-engine/).
+
 The following is an example deployment for the Anexia Webhook Provider:
 
 ```bash
@@ -53,13 +55,12 @@ extraArgs:
 provider:
   name: webhook
   webhook:
-    image: ghcr.io/anexia/k8s-external-dns-webhook
-    tag: v0.2.0
+    image:
+      repository: ghcr.io/anexia/k8s-external-dns-webhook
+      tag: v0.2.4
     env:
       - name: LOG_LEVEL
         value: debug # reduce in production
-      - name: ANEXIA_API_URL
-        value: <ANEXIA_API_URL>
       - name: ANEXIA_API_TOKEN
         valueFrom:
           secretKeyRef:
