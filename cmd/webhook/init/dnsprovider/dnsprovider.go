@@ -43,7 +43,7 @@ func Init(config configuration.Config) (provider.Provider, error) {
 
 	anexiaConfig, err := anexia.InitConfiguration()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("creating configuration failed: %w", err)
 	}
 
 	anexiaProvider, err := anexia.NewProvider(anexiaConfig, domainFilter)

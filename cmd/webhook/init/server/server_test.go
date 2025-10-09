@@ -13,6 +13,7 @@ import (
 	"time"
 
 	log "github.com/sirupsen/logrus"
+	"github.com/stretchr/testify/assert"
 	"go.anx.io/external-dns-webhook/cmd/webhook/init/configuration"
 	"go.anx.io/external-dns-webhook/pkg/webhook"
 	"sigs.k8s.io/external-dns/endpoint"
@@ -52,9 +53,8 @@ func TestInitAndServe(t *testing.T) {
 	go ShutdownGracefully(srv)
 
 	time.Sleep(300 * time.Millisecond)
-	if err := srv.Shutdown(context.TODO()); err != nil {
-		panic(err)
-	}
+	err := srv.Shutdown(context.TODO())
+	assert.NoError(t, err)
 }
 
 func TestRecords(t *testing.T) {

@@ -16,7 +16,7 @@ import (
 	"go.anx.io/external-dns-webhook/pkg/webhook"
 )
 
-// InitAndServe initializes the handler and starts to serve with the provided config
+// InitAndServe initializes the handler and starts to serve with the provided config.
 func InitAndServe(config configuration.Config, p *webhook.Webhook) *http.Server {
 	r := InitHandler(p)
 

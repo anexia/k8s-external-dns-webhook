@@ -17,7 +17,7 @@ type Configuration struct {
 func InitConfiguration() (*Configuration, error) {
 	cfg := &Configuration{}
 	if err := env.Parse(cfg); err != nil {
-		return nil, fmt.Errorf("reading anexia configuration failed: %w", err)
+		return nil, fmt.Errorf("reading configuration failed: %w", err)
 	}
 	return cfg, nil
 }
