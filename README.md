@@ -1,6 +1,6 @@
 # external-dns for Anexia CloudDNS
 
-[![License](https://img.shields.io/github/license/anexia/k8s-external-dns-webhook?style=for-the-badge)](LICENSE.md)
+[![License](https://img.shields.io/github/license/anexia/k8s-external-dns-webhook?style=for-the-badge)](LICENSE)
 [![Build](https://img.shields.io/github/actions/workflow/status/anexia/k8s-external-dns-webhook/pull_request.yml?style=for-the-badge)](https://github.com/anexia/k8s-external-dns-webhook/actions/workflows/pull_request.yml)
 [![GoReport](https://goreportcard.com/badge/github.com/anexia/k8s-external-dns-webhook?style=for-the-badge)](https://goreportcard.com/report/github.com/anexia/k8s-external-dns-webhook)
 [![Coverage](https://img.shields.io/coverallsCoverage/github/anexia/k8s-external-dns-webhook?style=for-the-badge)](https://coveralls.io/github/anexia/k8s-external-dns-webhook?branch=main)
