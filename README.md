@@ -1,6 +1,6 @@
 # external-dns for Anexia CloudDNS
 
-[![License](https://img.shields.io/github/license/anexia/k8s-external-dns-webhook?style=for-the-badge)](LICENSE.md)
+[![License](https://img.shields.io/github/license/anexia/k8s-external-dns-webhook?style=for-the-badge)](LICENSE)
 [![Build](https://img.shields.io/github/actions/workflow/status/anexia/k8s-external-dns-webhook/pull_request.yml?style=for-the-badge)](https://github.com/anexia/k8s-external-dns-webhook/actions/workflows/pull_request.yml)
 [![GoReport](https://goreportcard.com/badge/github.com/anexia/k8s-external-dns-webhook?style=for-the-badge)](https://goreportcard.com/report/github.com/anexia/k8s-external-dns-webhook)
 [![Coverage](https://img.shields.io/coverallsCoverage/github/anexia/k8s-external-dns-webhook?style=for-the-badge)](https://coveralls.io/github/anexia/k8s-external-dns-webhook?branch=main)
@@ -18,6 +18,8 @@ See [cmd/webhook/init/configuration/configuration.go](cmd/webhook/init/configura
 ## Kubernetes Deployment
 
 The Anexia Webhook Provider is provided as  an OCI image in [ghcr.io/anexia/k8s-external-dns-webhook](https://ghcr.io/anexia/k8s-external-dns-webhook).
+
+A full tutorial of the ExternalDNS in combination with Anexia CloudDNS can be viewed in the [official ExternalDNS tutorials](https://kubernetes-sigs.github.io/external-dns/latest/docs/tutorials/anexia-engine/).
 
 The following is an example deployment for the Anexia Webhook Provider:
 
@@ -53,13 +55,12 @@ extraArgs:
 provider:
   name: webhook
   webhook:
-    image: ghcr.io/anexia/k8s-external-dns-webhook
-    tag: v0.2.0
+    image:
+      repository: ghcr.io/anexia/k8s-external-dns-webhook
+      tag: v0.2.4
     env:
       - name: LOG_LEVEL
         value: debug # reduce in production
-      - name: ANEXIA_API_URL
-        value: <ANEXIA_API_URL>
       - name: ANEXIA_API_TOKEN
         valueFrom:
           secretKeyRef:

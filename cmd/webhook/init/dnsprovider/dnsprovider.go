@@ -5,7 +5,6 @@ import (
 	"regexp"
 	"strings"
 
-	env "github.com/caarlos0/env/v11"
 	log "github.com/sirupsen/logrus"
 	"go.anx.io/external-dns-webhook/cmd/webhook/init/configuration"
 	"go.anx.io/external-dns-webhook/internal/anexia"
@@ -42,15 +41,15 @@ func Init(config configuration.Config) (provider.Provider, error) {
 	}
 	log.Info(createMsg)
 
-	anexiaConfig := anexia.Configuration{}
-	if err := env.Parse(&anexiaConfig); err != nil {
-		return nil, fmt.Errorf("reading anexia configuration failed: %w", err)
+	anexiaConfig, err := anexia.InitConfiguration()
+	if err != nil {
+		return nil, fmt.Errorf("creating configuration failed: %w", err)
 	}
 
-	provider, err := anexia.NewProvider(&anexiaConfig, domainFilter)
+	anexiaProvider, err := anexia.NewProvider(anexiaConfig, domainFilter)
 	if err != nil {
 		return nil, fmt.Errorf("creating anexia provider failed: %w", err)
 	}
 
-	return provider, nil
+	return anexiaProvider, nil
 }

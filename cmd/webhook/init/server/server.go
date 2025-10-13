@@ -16,19 +16,9 @@ import (
 	"go.anx.io/external-dns-webhook/pkg/webhook"
 )
 
-// Init server initialization function
-// The server will respond to the following endpoints:
-// - / (GET): initialization, negotiates headers and returns the domain filter.
-// - /records (GET): returns the current records.
-// - /records (POST): applies the changes.
-// - /adjustendpoints (POST): executes the AdjustEndpoints method.
-func Init(config configuration.Config, p *webhook.Webhook) *http.Server {
-	r := chi.NewRouter()
-	r.Use(webhook.Health)
-	r.Get("/", p.Negotiate)
-	r.Get("/records", p.Records)
-	r.Post("/records", p.ApplyChanges)
-	r.Post("/adjustendpoints", p.AdjustEndpoints)
+// InitAndServe initializes the handler and starts to serve with the provided config.
+func InitAndServe(config configuration.Config, p *webhook.Webhook) *http.Server {
+	r := InitHandler(p)
 
 	srv := createHTTPServer(fmt.Sprintf("%s:%d", config.ServerHost, config.ServerPort), r, config.ServerReadTimeout, config.ServerWriteTimeout)
 	go func() {
@@ -38,6 +28,22 @@ func Init(config configuration.Config, p *webhook.Webhook) *http.Server {
 		}
 	}()
 	return srv
+}
+
+// InitHandler initializes the pure http.Handler
+// The server will respond to the following endpoints:
+// - / (GET): initialization, negotiates headers and returns the domain filter.
+// - /records (GET): returns the current records.
+// - /records (POST): applies the changes.
+// - /adjustendpoints (POST): executes the AdjustEndpoints method.
+func InitHandler(p *webhook.Webhook) http.Handler {
+	r := chi.NewRouter()
+	r.Use(webhook.Health)
+	r.Get("/", p.Negotiate)
+	r.Get("/records", p.Records)
+	r.Post("/records", p.ApplyChanges)
+	r.Post("/adjustendpoints", p.AdjustEndpoints)
+	return r
 }
 
 func createHTTPServer(addr string, hand http.Handler, readTimeout, writeTimeout time.Duration) *http.Server {

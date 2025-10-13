@@ -40,7 +40,7 @@ func TestInit(t *testing.T) {
 		{
 			name:          "empty configuration",
 			config:        configuration.Config{},
-			expectedError: "reading anexia configuration failed: env: environment variable \"ANEXIA_API_TOKEN\" should not be empty",
+			expectedError: "creating configuration failed: reading configuration failed: env: environment variable \"ANEXIA_API_TOKEN\" should not be empty",
 		},
 	}
 
