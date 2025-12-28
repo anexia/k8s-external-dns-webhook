@@ -40,7 +40,7 @@ func TestRecords(t *testing.T) {
 		name              string
 		givenRecords      []*anxcloudDns.Record
 		givenError        error
-		givenDomainFilter endpoint.DomainFilter
+		givenDomainFilter *endpoint.DomainFilter
 		expectedEndpoints []*endpoint.Endpoint
 		expectedError     error
 	}{
@@ -131,7 +131,7 @@ func TestApplyChanges(t *testing.T) {
 		givenRecords           []*anxcloudDns.Record
 		givenZones             []*anxcloudDns.Zone
 		givenZoneRecords       map[string][]*anxcloudDns.Record
-		givenDomainFilter      endpoint.DomainFilter
+		givenDomainFilter      *endpoint.DomainFilter
 		whenChanges            *plan.Changes
 		expectedRecordsCreated map[string][]*anxcloudDns.Record
 		expectedRecordsDeleted map[string][]string
