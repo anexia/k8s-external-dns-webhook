@@ -134,11 +134,11 @@ func (c *DNSClient) CreateRecord(ctx context.Context, record *anxcloudDns.Record
 type Provider struct {
 	provider.BaseProvider
 	client       DNSService
-	domainFilter endpoint.DomainFilter
+	domainFilter *endpoint.DomainFilter
 }
 
 // NewProvider returns an instance of new provider.
-func NewProvider(configuration *Configuration, domainFilter endpoint.DomainFilter) (*Provider, error) {
+func NewProvider(configuration *Configuration, domainFilter *endpoint.DomainFilter) (*Provider, error) {
 	client, err := createClient(configuration)
 	if err != nil {
 		return nil, fmt.Errorf("failed to create Anexia client: %w", err)

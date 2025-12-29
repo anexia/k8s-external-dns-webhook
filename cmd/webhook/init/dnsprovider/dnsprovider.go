@@ -13,7 +13,7 @@ import (
 )
 
 func Init(config configuration.Config) (provider.Provider, error) {
-	var domainFilter endpoint.DomainFilter
+	var domainFilter *endpoint.DomainFilter
 	createMsg := "Creating anexia provider with "
 
 	if config.RegexDomainFilter != "" {
