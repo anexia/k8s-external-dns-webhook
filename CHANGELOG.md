@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.2.5](https://github.com/anexia/k8s-external-dns-webhook/compare/v0.2.4...v0.2.5) (2025-12-30)
+
+
+### Bug Fixes
+
+* resolve pointer reuse bug in GetZones and GetRecordsByZoneNameAn… ([#119](https://github.com/anexia/k8s-external-dns-webhook/issues/119)) ([4e78a93](https://github.com/anexia/k8s-external-dns-webhook/commit/4e78a9324a3fbbae4ebd81806904d42eb2760716))
+
+
+### Miscellaneous Chores
+
+* **deps:** bump actions/checkout from 5 to 6 ([#117](https://github.com/anexia/k8s-external-dns-webhook/issues/117)) ([2be0217](https://github.com/anexia/k8s-external-dns-webhook/commit/2be02173bb73af4fb3d9ed6277de473b24bc36b9))
+* **deps:** bump anchore/sbom-action from 0.20.6 to 0.21.0 ([#121](https://github.com/anexia/k8s-external-dns-webhook/issues/121)) ([f546a8c](https://github.com/anexia/k8s-external-dns-webhook/commit/f546a8c5bb85f8c6d86e2f774dcc7d2fe8ef4fd6))
+* **deps:** bump go.anx.io/go-anxcloud from 0.7.8 to 0.8.0 ([#105](https://github.com/anexia/k8s-external-dns-webhook/issues/105)) ([81374f2](https://github.com/anexia/k8s-external-dns-webhook/commit/81374f2ca0f5d8119905c7f8d997a51084792ddf))
+* **deps:** bump golangci/golangci-lint-action from 8 to 9 ([#114](https://github.com/anexia/k8s-external-dns-webhook/issues/114)) ([e1bbc36](https://github.com/anexia/k8s-external-dns-webhook/commit/e1bbc36f3fcbace07741e4244e608a74d7540c50))
+* **deps:** bump sigs.k8s.io/external-dns from 0.17.0 to 0.20.0 ([#116](https://github.com/anexia/k8s-external-dns-webhook/issues/116)) ([066ead2](https://github.com/anexia/k8s-external-dns-webhook/commit/066ead28084210d027beb867a4ab0624a290b8ce))
+* **deps:** bump sigstore/cosign-installer from 3.10.0 to 4.0.0 ([#112](https://github.com/anexia/k8s-external-dns-webhook/issues/112)) ([3682e0f](https://github.com/anexia/k8s-external-dns-webhook/commit/3682e0f162083242b41ab943fdfa2f523eb83dd5))
+
 ## [0.2.4](https://github.com/anexia/k8s-external-dns-webhook/compare/v0.2.3...v0.2.4) (2025-10-13)
 
 
