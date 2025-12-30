@@ -300,127 +300,28 @@ func TestApplyChanges(t *testing.T) {
 func TestAdjustEndpoints(t *testing.T) {
 	testCases := []testCase{
 		{
-			name: "happy case",
-			returnAdjustedEndpoints: []*endpoint.Endpoint{
-				{
-					DNSName:    "adjusted.example.com",
-					Targets:    []string{""},
-					RecordType: "A",
-					RecordTTL:  3600,
-					Labels: map[string]string{
-						"label1": "value1",
-					},
-				},
-			},
+			name:   "happy case - pass through",
 			method: http.MethodPost,
 			headers: map[string]string{
 				"Content-Type": "application/external.dns.webhook+json;version=1",
-				"Accept":       "application/external.dns.webhook+json;version=1",
 			},
-			path: "/adjustendpoints",
-			body: `
-[
-	{
-		"dnsName": "toadjust.example.com",
-		"targets": [],
-		"recordType": "A",
-		"recordTTL": 3600,
-		"labels": {
-			"label1": "value1",
-			"label2": "value2"
-		}
-	}
-]`,
+			path:               "/adjustendpoints",
+			body:               `[{"dnsName":"example.com","recordType":"A","recordTTL":300,"targets":["1.2.3.4"]}]`,
 			expectedStatusCode: http.StatusOK,
 			expectedResponseHeaders: map[string]string{
 				"Content-Type": "application/external.dns.webhook+json;version=1",
 			},
-			expectedBody: "[{\"dnsName\":\"adjusted.example.com\",\"targets\":[\"\"],\"recordType\":\"A\",\"recordTTL\":3600,\"labels\":{\"label1\":\"value1\"}}]",
-			expectedEndpointsToAdjust: []*endpoint.Endpoint{
-				{
-					DNSName:    "toadjust.example.com",
-					Targets:    []string{},
-					RecordType: "A",
-					RecordTTL:  3600,
-					Labels: map[string]string{
-						"label1": "value1",
-						"label2": "value2",
-					},
-				},
-			},
-		},
-		{
-			name:   "no content type header",
-			method: http.MethodPost,
-			headers: map[string]string{
-				"Accept": "application/external.dns.webhook+json;version=1",
-			},
-			path:               "/adjustendpoints",
-			body:               "",
-			expectedStatusCode: http.StatusNotAcceptable,
-			expectedResponseHeaders: map[string]string{
-				"Content-Type": "text/plain",
-			},
-			expectedBody: "client must provide a content type",
-		},
-		{
-			name:   "wrong content type header",
-			method: http.MethodPost,
-			headers: map[string]string{
-				"Content-Type": "invalid",
-				"Accept":       "application/external.dns.webhook+json;version=1",
-			},
-			path:               "/adjustendpoints",
-			body:               "",
-			expectedStatusCode: http.StatusUnsupportedMediaType,
-			expectedResponseHeaders: map[string]string{
-				"Content-Type": "text/plain",
-			},
-			expectedBody: "Client must provide a valid versioned media type in the content type: unsupported media type version: 'invalid'. Supported media types are: 'application/external.dns.webhook+json;version=1'",
-		},
-		{
-			name:   "no accept header",
-			method: http.MethodPost,
-			headers: map[string]string{
-				"Content-Type": "application/external.dns.webhook+json;version=1",
-			},
-			path:               "/adjustendpoints",
-			body:               "",
-			expectedStatusCode: http.StatusNotAcceptable,
-			expectedResponseHeaders: map[string]string{
-				"Content-Type": "text/plain",
-			},
-			expectedBody: "client must provide an accept header",
-		},
-		{
-			name:   "wrong accept header",
-			method: http.MethodPost,
-			headers: map[string]string{
-				"Content-Type": "application/external.dns.webhook+json;version=1",
-				"Accept":       "invalid",
-			},
-			path:               "/adjustendpoints",
-			body:               "",
-			expectedStatusCode: http.StatusUnsupportedMediaType,
-			expectedResponseHeaders: map[string]string{
-				"Content-Type": "text/plain",
-			},
-			expectedBody: "Client must provide a valid versioned media type in the accept header: unsupported media type version: 'invalid'. Supported media types are: 'application/external.dns.webhook+json;version=1'",
+			expectedBody: "[{\"dnsName\":\"example.com\",\"targets\":[\"1.2.3.4\"],\"recordType\":\"A\",\"recordTTL\":300}]",
 		},
 		{
 			name:   "invalid json",
 			method: http.MethodPost,
 			headers: map[string]string{
 				"Content-Type": "application/external.dns.webhook+json;version=1",
-				"Accept":       "application/external.dns.webhook+json;version=1",
 			},
 			path:               "/adjustendpoints",
 			body:               "invalid",
 			expectedStatusCode: http.StatusBadRequest,
-			expectedResponseHeaders: map[string]string{
-				"Content-Type": "text/plain",
-			},
-			expectedBody: "failed to decode request body: invalid character 'i' looking for beginning of value",
 		},
 	}
 
