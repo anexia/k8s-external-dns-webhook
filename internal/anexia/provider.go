@@ -277,13 +277,7 @@ func (p *Provider) ApplyChanges(ctx context.Context, changes *plan.Changes) erro
 			continue
 		}
 		for _, target := range ep.Targets {
-			recordsToCreate = append(recordsToCreate, &anxcloudDns.Record{
-				ZoneName: zone[0].Name,
-				Name:     strings.TrimSuffix(ep.DNSName, "."+zone[0].Name),
-				RData:    target,
-				TTL:      int(ep.RecordTTL),
-				Type:     ep.RecordType,
-			})
+			recordsToCreate = append(recordsToCreate, CreateRecord(zone[0].Name, ep.DNSName, target, int(ep.RecordTTL), ep.RecordType))
 		}
 	}
 

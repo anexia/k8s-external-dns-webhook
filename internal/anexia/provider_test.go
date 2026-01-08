@@ -124,6 +124,7 @@ func TestApplyChanges(t *testing.T) {
 	log.SetLevel(log.DebugLevel)
 	log.SetReportCaller(true)
 	deZoneName := "de"
+	rootZoneName := "hello.de"
 	comZoneName := "com"
 	ctx := t.Context()
 	testCases := []struct {
@@ -200,6 +201,26 @@ func TestApplyChanges(t *testing.T) {
 						return "a", deZoneName, "A", 300, "1.2.3.4"
 					}
 					return "a", deZoneName, "A", 300, "5.6.7.8"
+				}),
+			},
+			expectedRecordsDeleted: nil,
+		},
+		{
+			name: "create a root record on a blank zone",
+			givenZones: createZoneSlice(1, func(_ int) string {
+				return rootZoneName
+			}),
+			givenZoneRecords: map[string][]*anxcloudDns.Record{
+				rootZoneName: createRecordSlice(0, nil),
+			},
+			whenChanges: &plan.Changes{
+				Create: createEndpointSlice(1, func(_ int) (string, string, endpoint.TTL, []string) {
+					return rootZoneName, "A", endpoint.TTL(300), []string{"1.2.3.4"}
+				}),
+			},
+			expectedRecordsCreated: map[string][]*anxcloudDns.Record{
+				rootZoneName: createRecordSlice(1, func(_ int) (string, string, string, int, string) {
+					return "@", rootZoneName, "A", 300, "1.2.3.4"
 				}),
 			},
 			expectedRecordsDeleted: nil,
@@ -486,14 +507,9 @@ func createRecordSlice(count int, modifier func(int) (string, string, string, in
 	records := make([]*anxcloudDns.Record, count)
 	for i := range count {
 		name, zone, typ, ttl, target := modifier(i)
-		records[i] = &anxcloudDns.Record{
-			Name:       name,
-			Type:       typ,
-			TTL:        ttl,
-			ZoneName:   zone,
-			RData:      target,
-			Identifier: strconv.Itoa(i),
-		}
+		record := CreateRecord(zone, name, target, ttl, typ)
+		record.Identifier = strconv.Itoa(i)
+		records[i] = record
 	}
 	return records
 }
