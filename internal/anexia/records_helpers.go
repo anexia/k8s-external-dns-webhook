@@ -8,16 +8,23 @@ import (
 )
 
 func CreateRecord(zoneName string, endpointName string, target string, recordTTL int, recordType string) *anxcloudDns.Record {
-	epName := strings.TrimSuffix(endpointName, "."+zoneName)
-	if endpointName == zoneName {
-		log.Debugf("Found a root domain(%s), converting %s to @", endpointName, epName)
-		epName = "@"
-	}
+	dName := DomainNameFor(zoneName, endpointName)
 	return &anxcloudDns.Record{
 		ZoneName: zoneName,
-		Name:     epName,
+		Name:     dName,
 		RData:    target,
 		TTL:      recordTTL,
 		Type:     recordType,
 	}
+}
+
+func DomainNameFor(zoneName string, endpointName string) string {
+	name := strings.TrimSuffix(endpointName, "."+zoneName)
+
+	if endpointName == zoneName {
+		log.Debugf("Found a root domain(%s), converting %s to @", endpointName, name)
+		name = "@"
+	}
+
+	return name
 }
