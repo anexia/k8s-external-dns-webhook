@@ -340,7 +340,7 @@ func TestApplyChanges(t *testing.T) {
 			},
 		},
 		{
-			name: "delete a root record on a blank zone",
+			name: "delete a the root record of a zone with only its root record",
 			givenZones: createZoneSlice(1, func(_ int) string {
 				return deZoneName
 			}),
