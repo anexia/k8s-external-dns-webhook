@@ -44,7 +44,7 @@ func TestCreateRecord(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			assert.Equal(t, tc.givenRecord, tc.expectedRecord)
+			assert.Equal(t, tc.expectedRecord, tc.givenRecord)
 		})
 	}
 }
@@ -59,19 +59,19 @@ func TestDomainNameFor(t *testing.T) {
 	}{
 		{
 			name:                 "should return '@' when the zoneName is the same as the endpointName",
-			givenEndpointName:    "@",
-			expectedEndpointName: DomainNameFor(zoneName, "a.de"),
+			givenEndpointName:    DomainNameFor(zoneName, "a.de"),
+			expectedEndpointName: "@",
 		},
 		{
 			name:                 "should return 'sub' when the endpointName is a subdomain of zoneName",
-			givenEndpointName:    "sub",
-			expectedEndpointName: DomainNameFor(zoneName, "sub.a.de"),
+			givenEndpointName:    DomainNameFor(zoneName, "sub.a.de"),
+			expectedEndpointName: "sub",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			assert.Equal(t, tc.givenEndpointName, tc.expectedEndpointName)
+			assert.Equal(t, tc.expectedEndpointName, tc.givenEndpointName)
 		})
 	}
 }
