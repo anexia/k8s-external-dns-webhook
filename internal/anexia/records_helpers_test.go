@@ -13,11 +13,6 @@ func TestCreateRecord(t *testing.T) {
 	ttl := 300
 	typeRecord := "A"
 
-	// mockRecord :=
-
-	// 	// assert equality
-	// 	assert.Equal(t, mockRecord, CreateRecord(zoneName, "a.de", target, ttl, typeRecord), "they should be equal")
-
 	testCases := []struct {
 		name           string
 		givenRecord    *anxcloudDns.Record
