@@ -211,8 +211,13 @@ func (p *Provider) Records(ctx context.Context) ([]*endpoint.Endpoint, error) {
 }
 
 func recordToEndpoint(record *anxcloudDns.Record) *endpoint.Endpoint {
+	dnsName := record.ZoneName
+	if record.Name != "@" {
+		dnsName = strings.Join([]string{record.Name, dnsName}, ".")
+	}
+
 	return &endpoint.Endpoint{
-		DNSName:    record.Name + "." + record.ZoneName,
+		DNSName:    dnsName,
 		RecordTTL:  endpoint.TTL(record.TTL),
 		RecordType: record.Type,
 		Targets:    []string{record.RData},
@@ -238,7 +243,7 @@ func (p *Provider) ApplyChanges(ctx context.Context, changes *plan.Changes) erro
 		}
 		potentialZones := FilterZonesByDomainName(allZones, ep.DNSName)
 		for _, zone := range potentialZones {
-			recordName := strings.TrimSuffix(ep.DNSName, "."+zone.Name)
+			recordName := DomainNameFor(zone.Name, ep.DNSName)
 			records, err := p.client.GetRecordsByZoneNameAndName(ctx, zone.Name, recordName)
 			if err != nil {
 				log.Errorf("failed to get records for zone %s and name %s: %v", zone.Name, recordName, err)
@@ -277,13 +282,7 @@ func (p *Provider) ApplyChanges(ctx context.Context, changes *plan.Changes) erro
 			continue
 		}
 		for _, target := range ep.Targets {
-			recordsToCreate = append(recordsToCreate, &anxcloudDns.Record{
-				ZoneName: zone[0].Name,
-				Name:     strings.TrimSuffix(ep.DNSName, "."+zone[0].Name),
-				RData:    target,
-				TTL:      int(ep.RecordTTL),
-				Type:     ep.RecordType,
-			})
+			recordsToCreate = append(recordsToCreate, CreateRecord(zone[0].Name, ep.DNSName, target, int(ep.RecordTTL), ep.RecordType))
 		}
 	}
 
