@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://github.com/anexia/k8s-external-dns-webhook/compare/v0.2.5...v0.3.0) (2026-01-14)
+
+
+### Features
+
+* allow root domains to be added as a record without duplication ([#128](https://github.com/anexia/k8s-external-dns-webhook/issues/128)) ([5744a68](https://github.com/anexia/k8s-external-dns-webhook/commit/5744a68247638d299aa342be0bd28b02bce025b0))
+
+
+### Miscellaneous Chores
+
+* **deps:** bump anchore/sbom-action from 0.21.0 to 0.21.1 ([#126](https://github.com/anexia/k8s-external-dns-webhook/issues/126)) ([c036cab](https://github.com/anexia/k8s-external-dns-webhook/commit/c036cab0148d5c30dc70e64288cf5d5473529a33))
+* **deps:** bump siderolabs/conform ([#129](https://github.com/anexia/k8s-external-dns-webhook/issues/129)) ([a46014a](https://github.com/anexia/k8s-external-dns-webhook/commit/a46014ae89a5935080f3fd023699a7e9bc973bdc))
+
 ## [0.2.5](https://github.com/anexia/k8s-external-dns-webhook/compare/v0.2.4...v0.2.5) (2026-01-07)
 
 
