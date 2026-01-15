@@ -4,7 +4,7 @@ go 1.25
 
 require (
 	github.com/caarlos0/env/v11 v11.3.1
-	github.com/go-chi/chi/v5 v5.2.3
+	github.com/go-chi/chi/v5 v5.2.4
 	github.com/sirupsen/logrus v1.9.3
 	github.com/stretchr/testify v1.11.1
 	go.anx.io/go-anxcloud v0.8.0
