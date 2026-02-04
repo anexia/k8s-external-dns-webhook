@@ -57,7 +57,7 @@ provider:
   webhook:
     image:
       repository: ghcr.io/anexia/k8s-external-dns-webhook
-      tag: v0.2.4
+      tag: v0.3.0
     env:
       - name: LOG_LEVEL
         value: debug # reduce in production
