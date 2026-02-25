@@ -19,6 +19,11 @@ builds:
       - linux
     goarm:
       - "7"
+    ignore:
+      - goos: windows
+        goarch: arm
+      - goos: darwin
+        goarch: arm
     ldflags:
       - -X 'main.Version={{ .Tag }}'
       - -X 'main.Gitsha={{ .ShortCommit }}'
