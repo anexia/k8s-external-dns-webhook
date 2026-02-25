@@ -65,7 +65,9 @@ jobs:
         run: |
           make test
 
-      - run: go tool goveralls -coverprofile=covprofile -service=github
+      - name: Upload coverage to Coveralls
+        run: go tool goveralls -coverprofile=covprofile -service=github
+        continue-on-error: true
         env:
           COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -105,7 +107,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Release via GoReleaser
-        uses: goreleaser/goreleaser-action@v6
+        uses: goreleaser/goreleaser-action@v7
         with:
           args: -p 3 release --snapshot --clean --skip=publish,sign --timeout 60m0s
           version: latest
