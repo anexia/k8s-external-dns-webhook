@@ -65,7 +65,9 @@ jobs:
         run: |
           make test
 
-      - run: go tool goveralls -coverprofile=covprofile -service=github
+      - name: Upload coverage to Coveralls
+        run: go tool goveralls -coverprofile=covprofile -service=github
+        continue-on-error: true
         env:
           COVERALLS_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
