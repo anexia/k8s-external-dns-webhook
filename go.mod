@@ -7,7 +7,7 @@ require (
 	github.com/go-chi/chi/v5 v5.2.5
 	github.com/sirupsen/logrus v1.9.4
 	github.com/stretchr/testify v1.11.1
-	go.anx.io/go-anxcloud v0.10.2
+	go.anx.io/go-anxcloud v0.10.3
 	sigs.k8s.io/external-dns v0.20.0
 )
 
