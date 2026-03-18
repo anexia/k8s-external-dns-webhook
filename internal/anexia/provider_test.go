@@ -33,6 +33,31 @@ func TestNewProvider(t *testing.T) {
 	require.False(t, p.domainFilter.Match("b.de."))
 }
 
+func TestGetDomainFilter(t *testing.T) {
+	t.Run("returns configured domain filter", func(t *testing.T) {
+		domainFilter := endpoint.NewDomainFilter([]string{"example.com"})
+		p := &Provider{domainFilter: domainFilter}
+
+		result := p.GetDomainFilter()
+
+		df, ok := result.(*endpoint.DomainFilter)
+		require.True(t, ok)
+		require.True(t, df.IsConfigured())
+		require.True(t, df.Match("test.example.com"))
+		require.False(t, df.Match("test.other.com"))
+	})
+
+	t.Run("returns empty domain filter when unconfigured", func(t *testing.T) {
+		p := &Provider{domainFilter: &endpoint.DomainFilter{}}
+
+		result := p.GetDomainFilter()
+
+		df, ok := result.(*endpoint.DomainFilter)
+		require.True(t, ok)
+		require.False(t, df.IsConfigured())
+	})
+}
+
 func TestRecords(t *testing.T) {
 	log.SetLevel(log.DebugLevel)
 	ctx := t.Context()
