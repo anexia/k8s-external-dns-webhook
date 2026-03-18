@@ -75,7 +75,7 @@ func (p *Webhook) headerCheck(isContentType bool, w http.ResponseWriter, r *http
 
 		_, writeErr := fmt.Fprint(w, err.Error())
 		if writeErr != nil {
-			requestLog(r).WithField(logFieldError, writeErr).Fatalf("error writing error message to response writer")
+			requestLog(r).WithField(logFieldError, writeErr).Errorf("error writing error message to response writer")
 		}
 		return err
 	}
@@ -95,7 +95,7 @@ func (p *Webhook) headerCheck(isContentType bool, w http.ResponseWriter, r *http
 		err := fmt.Errorf(msg+": %s", err.Error())
 		_, writeErr := fmt.Fprint(w, err.Error())
 		if writeErr != nil {
-			requestLog(r).WithField(logFieldError, writeErr).Fatalf("error writing error message to response writer")
+			requestLog(r).WithField(logFieldError, writeErr).Errorf("error writing error message to response writer")
 		}
 		return err
 	}
@@ -145,7 +145,7 @@ func (p *Webhook) ApplyChanges(w http.ResponseWriter, r *http.Request) {
 
 		errMsg := "error decoding changes: " + err.Error()
 		if _, writeError := fmt.Fprint(w, errMsg); writeError != nil {
-			requestLog(r).WithField(logFieldError, writeError).Fatalf("error writing error message to response writer")
+			requestLog(r).WithField(logFieldError, writeError).Errorf("error writing error message to response writer")
 		}
 		requestLog(r).WithField(logFieldError, err).Info(errMsg)
 		return
