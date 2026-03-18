@@ -465,6 +465,63 @@ func TestAdjustEndpoints(t *testing.T) {
 	require.Equal(t, endpoints, actualEndpoints)
 }
 
+func TestFilterZonesByDomainName(t *testing.T) {
+	zones := []*anxcloudDns.Zone{
+		{Name: "example.com"},
+		{Name: "sub.example.com"},
+		{Name: "de"},
+		{Name: "other.org"},
+	}
+
+	testCases := []struct {
+		name          string
+		domainName    string
+		expectedZones []string
+	}{
+		{
+			name:          "exact match returns the zone",
+			domainName:    "example.com",
+			expectedZones: []string{"example.com"},
+		},
+		{
+			name:          "subdomain match returns parent zone",
+			domainName:    "app.example.com",
+			expectedZones: []string{"example.com"},
+		},
+		{
+			name:          "deep subdomain matches most specific zone first",
+			domainName:    "api.sub.example.com",
+			expectedZones: []string{"sub.example.com", "example.com"},
+		},
+		{
+			name:          "substring without dot boundary does not match",
+			domainName:    "code",
+			expectedZones: []string{},
+		},
+		{
+			name:          "substring prefix does not match",
+			domainName:    "myexample.com",
+			expectedZones: []string{},
+		},
+		{
+			name:          "no matching zones returns empty",
+			domainName:    "unknown.net",
+			expectedZones: []string{},
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			result := FilterZonesByDomainName(zones, tc.domainName)
+			resultNames := make([]string, len(result))
+			for i, z := range result {
+				resultNames[i] = z.Name
+			}
+			assert.Equal(t, tc.expectedZones, resultNames)
+		})
+	}
+}
+
 type mockDNSClient struct {
 	returnError    error
 	allRecords     []*anxcloudDns.Record
