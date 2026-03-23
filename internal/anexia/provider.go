@@ -298,7 +298,7 @@ func (p *Provider) ApplyChanges(ctx context.Context, changes *plan.Changes) erro
 func FilterZonesByDomainName(zones []*anxcloudDns.Zone, domainName string) []*anxcloudDns.Zone {
 	possibleZones := make([]*anxcloudDns.Zone, 0)
 	for _, zone := range zones {
-		if strings.HasSuffix(domainName, zone.Name) {
+		if domainName == zone.Name || strings.HasSuffix(domainName, "."+zone.Name) {
 			possibleZones = append(possibleZones, zone)
 		}
 	}
