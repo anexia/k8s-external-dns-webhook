@@ -137,6 +137,11 @@ type Provider struct {
 	domainFilter *endpoint.DomainFilter
 }
 
+// GetDomainFilter returns the domain filter configured for this provider.
+func (p *Provider) GetDomainFilter() endpoint.DomainFilterInterface {
+	return p.domainFilter
+}
+
 // NewProvider returns an instance of new provider.
 func NewProvider(configuration *Configuration, domainFilter *endpoint.DomainFilter) (*Provider, error) {
 	client, err := createClient(configuration)
