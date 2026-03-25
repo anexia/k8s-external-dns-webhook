@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.3.1](https://github.com/anexia/k8s-external-dns-webhook/compare/v0.3.0...v0.3.1) (2026-03-25)
+
+
+### Bug Fixes
+
+* collect records from all zones instead of only the last one ([#151](https://github.com/anexia/k8s-external-dns-webhook/issues/151)) ([2072e1a](https://github.com/anexia/k8s-external-dns-webhook/commit/2072e1a3b7f250baf0c89d5c1c938f966caef44b))
+* override GetDomainFilter to return the configured domain filter ([#152](https://github.com/anexia/k8s-external-dns-webhook/issues/152)) ([ce29673](https://github.com/anexia/k8s-external-dns-webhook/commit/ce2967330a95a9565b8a1b53f6a17bb6b59c2edd))
+* replace log.Fatalf with log.Errorf in HTTP handlers ([#155](https://github.com/anexia/k8s-external-dns-webhook/issues/155)) ([9bbf721](https://github.com/anexia/k8s-external-dns-webhook/commit/9bbf721d13550b6f44ebd91a3662838fa2ee95a3))
+* use domain-boundary matching in FilterZonesByDomainName ([#153](https://github.com/anexia/k8s-external-dns-webhook/issues/153)) ([89f48fb](https://github.com/anexia/k8s-external-dns-webhook/commit/89f48fb30291aaa9d7b64e3781137e6686b7275f))
+
+
+### Miscellaneous Chores
+
+* **deps:** bump anchore/sbom-action from 0.21.1 to 0.22.2 ([#135](https://github.com/anexia/k8s-external-dns-webhook/issues/135)) ([7cd8850](https://github.com/anexia/k8s-external-dns-webhook/commit/7cd8850bc93ac50c60bfe741b74c7a95a790759b))
+* **deps:** bump docker/login-action from 3 to 4 ([#145](https://github.com/anexia/k8s-external-dns-webhook/issues/145)) ([95eb507](https://github.com/anexia/k8s-external-dns-webhook/commit/95eb50730cb999e6286e99b7f8030ff15572878f))
+* **deps:** bump docker/setup-buildx-action from 3 to 4 ([#147](https://github.com/anexia/k8s-external-dns-webhook/issues/147)) ([89ba520](https://github.com/anexia/k8s-external-dns-webhook/commit/89ba5206c417df4e9ed40b0771af54c7f67a4790))
+* **deps:** bump docker/setup-qemu-action from 3 to 4 ([#146](https://github.com/anexia/k8s-external-dns-webhook/issues/146)) ([3b82434](https://github.com/anexia/k8s-external-dns-webhook/commit/3b82434f0ff5a7e1a33028326986de9e634e9d49))
+* **deps:** bump github.com/caarlos0/env/v11 from 11.3.1 to 11.4.0 ([#140](https://github.com/anexia/k8s-external-dns-webhook/issues/140)) ([804cbbf](https://github.com/anexia/k8s-external-dns-webhook/commit/804cbbfebcc3799fe0205c340bb94ecf59f50f79))
+* **deps:** bump github.com/go-chi/chi/v5 from 5.2.3 to 5.2.5 ([#136](https://github.com/anexia/k8s-external-dns-webhook/issues/136)) ([c28c17e](https://github.com/anexia/k8s-external-dns-webhook/commit/c28c17ed5a8caf7c85221755f23abbb0cd0637e4))
+* **deps:** bump github.com/sirupsen/logrus from 1.9.3 to 1.9.4 ([#131](https://github.com/anexia/k8s-external-dns-webhook/issues/131)) ([05b9bb6](https://github.com/anexia/k8s-external-dns-webhook/commit/05b9bb655bf2de7fc79eb6bc39d0b50f84041bc6))
+* **deps:** bump go.anx.io/go-anxcloud from 0.10.2 to 0.10.4 ([#150](https://github.com/anexia/k8s-external-dns-webhook/issues/150)) ([156953b](https://github.com/anexia/k8s-external-dns-webhook/commit/156953b53f9723ebee99c070ba7f5f026ae13f83))
+* **deps:** bump go.anx.io/go-anxcloud from 0.8.0 to 0.10.2 ([#141](https://github.com/anexia/k8s-external-dns-webhook/issues/141)) ([e41ae4a](https://github.com/anexia/k8s-external-dns-webhook/commit/e41ae4a42c903d5a0665989d08c3d94565fe22e8))
+* **deps:** bump goreleaser/goreleaser-action from 6 to 7 ([#139](https://github.com/anexia/k8s-external-dns-webhook/issues/139)) ([f931586](https://github.com/anexia/k8s-external-dns-webhook/commit/f9315869de81881e08376e00c71b8da5c8b9fe1c))
+* migrate from dockers/docker_manifests to dockers_v2 ([#142](https://github.com/anexia/k8s-external-dns-webhook/issues/142)) ([83cf7ad](https://github.com/anexia/k8s-external-dns-webhook/commit/83cf7ad513eacf84ee082a6d75c6af2e2e9c152d))
+
 ## [0.3.0](https://github.com/anexia/k8s-external-dns-webhook/compare/v0.2.5...v0.3.0) (2026-01-14)
 
 
