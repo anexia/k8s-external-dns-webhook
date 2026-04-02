@@ -127,8 +127,8 @@ github.com/xhit/go-str2duration/v2 v2.1.0/go.mod h1:ohY8p+0f07DiV6Em5LKB0s2YpLtX
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.4.13/go.mod h1:6yULJ656Px+3vBD8DxQVa3kxgyrAnzto9xy5taEt/CY=
-go.anx.io/go-anxcloud v0.10.4 h1:sZ1T/+p57vPjnU/dQGaFPe5M4OtWsTjBX1ROKpJl69g=
-go.anx.io/go-anxcloud v0.10.4/go.mod h1:nhwk53AePw9CH91dAGGGzrjlpovbR8dfixtFUkHD/PA=
+go.anx.io/go-anxcloud v0.11.0 h1:OHeX4W7Glt9AsRH4IdYbboUCvYwctVbOydLpx3YI2xI=
+go.anx.io/go-anxcloud v0.11.0/go.mod h1:nhwk53AePw9CH91dAGGGzrjlpovbR8dfixtFUkHD/PA=
 go.uber.org/goleak v1.3.0 h1:2K3zAYmnTNqV73imy9J1T3WC+gmCePx2hEGkimedGto=
 go.uber.org/goleak v1.3.0/go.mod h1:CoHD4mav9JJNrW/WLlf7HGZPjdw8EucARQHekz1X6bE=
 go.uber.org/multierr v1.11.0 h1:blXXJkSxSSfBVBlC76pxqeO+LN3aDfLQo+309xJstO0=
