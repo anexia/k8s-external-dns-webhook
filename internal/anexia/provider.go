@@ -24,6 +24,7 @@ type DNSClient struct {
 type DNSService interface {
 	GetZones(ctx context.Context) ([]*anxcloudDns.Zone, error)
 	GetRecords(ctx context.Context) ([]*anxcloudDns.Record, error)
+	GetFilteredRecords(ctx context.Context, domainFilter *endpoint.DomainFilter) ([]*anxcloudDns.Record, error)
 	GetRecordsByZoneNameAndName(ctx context.Context, zoneName, name string) ([]*anxcloudDns.Record, error)
 	DeleteRecord(ctx context.Context, record *anxcloudDns.Record) error
 	CreateRecord(ctx context.Context, record *anxcloudDns.Record) error
@@ -52,6 +53,10 @@ func (c *DNSClient) GetZones(ctx context.Context) ([]*anxcloudDns.Zone, error) {
 }
 
 func (c *DNSClient) GetRecords(ctx context.Context) ([]*anxcloudDns.Record, error) {
+	return c.GetFilteredRecords(ctx, nil)
+}
+
+func (c *DNSClient) GetFilteredRecords(ctx context.Context, domainFilter *endpoint.DomainFilter) ([]*anxcloudDns.Record, error) {
 	log.Debugf("get all records ...")
 
 	allZones, err := c.GetZones(ctx)
@@ -61,6 +66,10 @@ func (c *DNSClient) GetRecords(ctx context.Context) ([]*anxcloudDns.Record, erro
 
 	records := make([]*anxcloudDns.Record, 0)
 	for _, zone := range allZones {
+		if domainFilter != nil && domainFilter.IsConfigured() && !domainFilter.Match(zone.Name) {
+			log.Debugf("skipping zone %s, does not match domain filter", zone.Name)
+			continue
+		}
 		log.Debugf("get records for zone %s ...", zone.Name)
 		zoneName := zone.Name
 		channel := make(types.ObjectChannel)
@@ -182,7 +191,7 @@ func createClient(configuration *Configuration) (types.API, error) {
 }
 
 func (p *Provider) Records(ctx context.Context) ([]*endpoint.Endpoint, error) {
-	records, err := p.client.GetRecords(ctx)
+	records, err := p.client.GetFilteredRecords(ctx, p.domainFilter)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get records: %w", err)
 	}
