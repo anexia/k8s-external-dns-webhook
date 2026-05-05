@@ -561,6 +561,11 @@ func (c *mockDNSClient) GetRecords(_ context.Context) ([]*anxcloudDns.Record, er
 	return c.allRecords, c.returnError
 }
 
+func (c *mockDNSClient) GetFilteredRecords(_ context.Context, _ *endpoint.DomainFilter) ([]*anxcloudDns.Record, error) {
+	log.Debugf("GetFilteredRecords called")
+	return c.allRecords, c.returnError
+}
+
 func (c *mockDNSClient) GetZoneRecords(_ context.Context, zoneName string) ([]*anxcloudDns.Record, error) {
 	log.Debugf("GetZoneRecords called with zoneName %s", zoneName)
 	return c.zoneRecords[zoneName], c.returnError
