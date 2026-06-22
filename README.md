@@ -48,8 +48,9 @@ sources:
 extraArgs:
   ## must override the default value with port 8888 with port 8080 because this is hard-coded in the helm chart
   - --webhook-provider-url=http://localhost:8080
-  ## You should filter the domains that can be requested to limit the amount of requests done to the anxia engine.
-  ## This will help you avoid running into rate limiting
+  ## You should filter the domains that can be requested to limit the amount of requests done to the anexia engine.
+  ## This will help you avoid running into rate limiting.
+  ## Make sure to provide the same value to both the external-dns as well as the webhook via DOMAIN_FILTER or REGEXP_DOMAIN_FILTER.
   - --domain-filter=your.domain.com
 
 provider:
@@ -57,10 +58,12 @@ provider:
   webhook:
     image:
       repository: ghcr.io/anexia/k8s-external-dns-webhook
-      tag: v0.3.0
+      tag: v0.3.1
     env:
       - name: LOG_LEVEL
         value: debug # reduce in production
+      - name: LOG_FORMAT
+        value: "json"
       - name: ANEXIA_API_TOKEN
         valueFrom:
           secretKeyRef:
@@ -72,6 +75,10 @@ provider:
         value: "8080"
       - name: DRY_RUN
         value: "false"
+      - name: DOMAIN_FILTER
+        value: "your.domain.com"
+#      - name: REGEXP_DOMAIN_FILTER
+#        value: "your.*\.com"
 EOF
 
 # install external-dns with helm
