@@ -120,10 +120,17 @@ func (p *Webhook) Records(w http.ResponseWriter, r *http.Request) {
 	}
 
 	requestLog(r).Debugf("returning records count: %d", len(records))
+	b, err := json.Marshal(records)
+	if err != nil {
+		requestLog(r).WithField(logFieldError, err).Error("error encoding records")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
 	w.Header().Set(contentTypeHeader, string(mediaTypeVersion1))
 	w.Header().Set(varyHeader, contentTypeHeader)
-	if err = json.NewEncoder(w).Encode(records); err != nil {
-		requestLog(r).WithField(logFieldError, err).Error("error encoding records")
+	if _, writeError := w.Write(b); writeError != nil {
+		requestLog(r).WithField(logFieldError, writeError).Error("error writing response")
 	}
 }
 
@@ -169,9 +176,16 @@ func (p *Webhook) AdjustEndpoints(w http.ResponseWriter, r *http.Request) {
 	}
 
 	requestLog(r).Debugf("adjust endpoints pass-through, count: %d", len(endpoints))
-	w.Header().Set(contentTypeHeader, string(mediaTypeVersion1))
-	if err := json.NewEncoder(w).Encode(endpoints); err != nil {
+	b, err := json.Marshal(endpoints)
+	if err != nil {
 		requestLog(r).WithField(logFieldError, err).Error("error encoding endpoints")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set(contentTypeHeader, string(mediaTypeVersion1))
+	if _, writeError := w.Write(b); writeError != nil {
+		requestLog(r).WithField(logFieldError, writeError).Error("error writing response")
 	}
 }
 
