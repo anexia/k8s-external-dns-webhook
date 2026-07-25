@@ -20,7 +20,7 @@ jobs:
     name: Conform
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -33,7 +33,7 @@ jobs:
     name: Lint Provider
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install Go
         uses: actions/setup-go@v7
@@ -54,7 +54,7 @@ jobs:
     name: Unit Tests
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install Go
         uses: actions/setup-go@v7
@@ -77,7 +77,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Lint Dockerfile
         uses: hadolint/hadolint-action@v3.3.0
@@ -89,7 +89,7 @@ jobs:
     name: Build Provider and Container
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install Go
         uses: actions/setup-go@v7
