@@ -4,7 +4,7 @@ go 1.26.1
 
 require (
 	github.com/caarlos0/env/v11 v11.4.1
-	github.com/go-chi/chi/v5 v5.2.5
+	github.com/go-chi/chi/v5 v5.3.1
 	github.com/sirupsen/logrus v1.9.4
 	github.com/stretchr/testify v1.11.1
 	go.anx.io/go-anxcloud v0.14.5
