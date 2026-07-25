@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.3.2](https://github.com/anexia/k8s-external-dns-webhook/compare/v0.3.1...v0.3.2) (2026-07-25)
+
+
+### Miscellaneous Chores
+
+* **deps:** bump actions/checkout from 6 to 7 ([#172](https://github.com/anexia/k8s-external-dns-webhook/issues/172)) ([bdf1f6a](https://github.com/anexia/k8s-external-dns-webhook/commit/bdf1f6ad96c92f9f9057e1bdd628f945d61a777b))
+* **deps:** bump actions/setup-go from 6 to 7 ([#175](https://github.com/anexia/k8s-external-dns-webhook/issues/175)) ([cf95dc1](https://github.com/anexia/k8s-external-dns-webhook/commit/cf95dc1f44f608977dc329c2c7cf32882489af8f))
+* **deps:** bump github.com/go-chi/chi/v5 from 5.2.5 to 5.3.1 ([#174](https://github.com/anexia/k8s-external-dns-webhook/issues/174)) ([93702f8](https://github.com/anexia/k8s-external-dns-webhook/commit/93702f8422ef47c710c28fd9740acc5d80994df3))
+* **deps:** bump go.anx.io/go-anxcloud from 0.14.1 to 0.14.5 ([#176](https://github.com/anexia/k8s-external-dns-webhook/issues/176)) ([040dc36](https://github.com/anexia/k8s-external-dns-webhook/commit/040dc362145e4412162c8b76a8f01ea4c32dcc11))
+* **deps:** bump sigstore/cosign-installer from 4.1.1 to 4.1.2 ([#167](https://github.com/anexia/k8s-external-dns-webhook/issues/167)) ([0ad94dc](https://github.com/anexia/k8s-external-dns-webhook/commit/0ad94dc038a70259676a0164a7c6e0ebf552c4d0))
+
 ## [0.3.1](https://github.com/anexia/k8s-external-dns-webhook/compare/v0.3.0...v0.3.1) (2026-05-05)
 
 
