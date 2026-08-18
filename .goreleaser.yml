@@ -52,12 +52,8 @@ dockers_v2:
       - "ghcr.io/anexia/k8s-external-dns-webhook"
     tags:
       - "latest"
-      - "{{ .Env.CI_COMMIT_SHA }}"
-      - "{{ .Env.CI_COMMIT_TAG }}"
-    build_args:
-      CI_COMMIT_TIMESTAMP: "{{ .Env.CI_COMMIT_TIMESTAMP }}"
-      CI_COMMIT_SHA: "{{ .Env.CI_COMMIT_SHA }}"
-      CI_COMMIT_TAG: "{{ .Env.CI_COMMIT_TAG }}"
+      - "{{ .FullCommit }}"
+      - "{{ .Tag }}"
     platforms:
       - linux/amd64
       - linux/arm64
