@@ -51,9 +51,11 @@ dockers_v2:
   - images:
       - "ghcr.io/anexia/k8s-external-dns-webhook"
     tags:
-      - "latest"
-      - "{{ .FullCommit }}"
+      # Tags that render empty are dropped, so latest is skipped on
+      # prereleases. Keep at least one unconditional tag.
       - "{{ .Tag }}"
+      - "{{ .FullCommit }}"
+      - "{{ if not .Prerelease }}latest{{ end }}"
     platforms:
       - linux/amd64
       - linux/arm64
