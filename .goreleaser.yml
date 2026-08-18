@@ -1,6 +1,7 @@
 ---
 # yaml-language-server: $schema=https://goreleaser.com/static/schema.json
 version: 2
+report_sizes: true
 archives:
   - id: archive
     name_template: "{{ .Binary }}-{{ .Tag }}-{{ .Os }}-{{ .Arch }}"
@@ -27,6 +28,11 @@ builds:
     ldflags:
       - -X 'main.Version={{ .Tag }}'
       - -X 'main.Gitsha={{ .ShortCommit }}'
+    # Strip local build paths and pin the binary mtime to the commit so
+    # builds are reproducible.
+    flags:
+      - -trimpath
+    mod_timestamp: "{{ .CommitTimestamp }}"
     main: ./cmd/webhook
 source:
   enabled: true
