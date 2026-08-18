@@ -56,6 +56,22 @@ dockers_v2:
       - "{{ .Tag }}"
       - "{{ .FullCommit }}"
       - "{{ if not .Prerelease }}latest{{ end }}"
+    labels: &oci_labels
+      org.opencontainers.image.title: "external-dns-anexia-webhook"
+      org.opencontainers.image.description: "ExternalDNS webhook provider for Anexia CloudDNS"
+      org.opencontainers.image.url: "https://github.com/anexia/k8s-external-dns-webhook"
+      org.opencontainers.image.source: "https://github.com/anexia/k8s-external-dns-webhook"
+      org.opencontainers.image.documentation: "https://github.com/anexia/k8s-external-dns-webhook#readme"
+      org.opencontainers.image.licenses: "Apache-2.0"
+      org.opencontainers.image.vendor: "Anexia"
+      org.opencontainers.image.version: "{{ .Version }}"
+      org.opencontainers.image.revision: "{{ .FullCommit }}"
+      org.opencontainers.image.created: "{{ .Date }}"
+      org.opencontainers.image.base.name: "{{ .BaseImage }}"
+      org.opencontainers.image.base.digest: "{{ .BaseImageDigest }}"
+    # Labels land on the manifests, annotations on the image index, so
+    # registries such as ghcr can link the package to this repository.
+    annotations: *oci_labels
     platforms:
       - linux/amd64
       - linux/arm64
