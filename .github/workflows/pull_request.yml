@@ -90,6 +90,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
 
       - name: Install Go
         uses: actions/setup-go@v7
@@ -113,6 +115,3 @@ jobs:
           version: latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CI_COMMIT_TIMESTAMP: ${{ github.event.pull_request.updated_at }}
-          CI_COMMIT_SHA: ${{ github.sha }}
-          CI_COMMIT_TAG: ${{ github.sha }}-dev
