@@ -4,7 +4,7 @@ TESTPARALLELISM := 4
 
 VERSION ?= $(shell git describe --tags --always --dirty 2>/dev/null || echo dev)
 GITSHA  ?= $(shell git rev-parse --short HEAD 2>/dev/null || echo unknown)
-LDFLAGS := -X 'main.Version=$(VERSION)' -X 'main.Gitsha=$(GITSHA)'
+LDFLAGS := -X 'main.Version=$(VERSION)' -X 'main.Gitsha=$(GITSHA)' -s -w
 
 .DEFAULT_GOAL := help
 
@@ -15,7 +15,7 @@ help: ## Show this help
 
 .PHONY: build
 build: ## Build the webhook binary into bin/
-	go build -ldflags "$(LDFLAGS)" -o $(CURDIR)/bin/$(ARTIFACT_NAME) ./cmd/webhook
+	go build -ldflags "$(LDFLAGS)" -trimpath -o $(CURDIR)/bin/$(ARTIFACT_NAME) ./cmd/webhook
 
 .PHONY: test
 test: ## Run unit tests with coverage
