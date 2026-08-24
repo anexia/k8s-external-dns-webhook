@@ -120,13 +120,17 @@ func (p *Webhook) Records(w http.ResponseWriter, r *http.Request) {
 	}
 
 	requestLog(r).Debugf("returning records count: %d", len(records))
-	w.Header().Set(contentTypeHeader, string(mediaTypeVersion1))
-	w.Header().Set(varyHeader, contentTypeHeader)
-	err = json.NewEncoder(w).Encode(records)
+	b, err := json.Marshal(records)
 	if err != nil {
 		requestLog(r).WithField(logFieldError, err).Error("error encoding records")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
+	}
+
+	w.Header().Set(contentTypeHeader, string(mediaTypeVersion1))
+	w.Header().Set(varyHeader, contentTypeHeader)
+	if _, writeError := w.Write(b); writeError != nil {
+		requestLog(r).WithField(logFieldError, writeError).Error("error writing response")
 	}
 }
 
@@ -172,10 +176,16 @@ func (p *Webhook) AdjustEndpoints(w http.ResponseWriter, r *http.Request) {
 	}
 
 	requestLog(r).Debugf("adjust endpoints pass-through, count: %d", len(endpoints))
-	w.Header().Set(contentTypeHeader, string(mediaTypeVersion1))
-	if err := json.NewEncoder(w).Encode(endpoints); err != nil {
+	b, err := json.Marshal(endpoints)
+	if err != nil {
 		requestLog(r).WithField(logFieldError, err).Error("error encoding endpoints")
 		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set(contentTypeHeader, string(mediaTypeVersion1))
+	if _, writeError := w.Write(b); writeError != nil {
+		requestLog(r).WithField(logFieldError, writeError).Error("error writing response")
 	}
 }
 
@@ -185,9 +195,16 @@ func (p *Webhook) Negotiate(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	b, err := p.provider.GetDomainFilter().(*endpoint.DomainFilter).MarshalJSON()
+	df, ok := p.provider.GetDomainFilter().(*endpoint.DomainFilter)
+	if !ok {
+		requestLog(r).Error("failed to cast domain filter to *endpoint.DomainFilter")
+		w.WriteHeader(http.StatusInternalServerError)
+		return
+	}
+
+	b, err := df.MarshalJSON()
 	if err != nil {
-		log.Errorf("failed to marshal domain filter, request method: %s, request path: %s", r.Method, r.URL.Path)
+		requestLog(r).WithField(logFieldError, err).Error("failed to marshal domain filter")
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -195,8 +212,6 @@ func (p *Webhook) Negotiate(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set(contentTypeHeader, string(mediaTypeVersion1))
 	if _, writeError := w.Write(b); writeError != nil {
 		requestLog(r).WithField(logFieldError, writeError).Error("error writing response")
-		w.WriteHeader(http.StatusInternalServerError)
-		return
 	}
 }
 
