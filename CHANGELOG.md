@@ -1,5 +1,28 @@
 # Changelog
 
+## [0.3.2](https://github.com/anexia/k8s-external-dns-webhook/compare/v0.3.1...v0.3.2) (2026-08-24)
+
+
+### Bug Fixes
+
+* improve HTTP response handling in webhook handlers ([#154](https://github.com/anexia/k8s-external-dns-webhook/issues/154)) ([5c01b2f](https://github.com/anexia/k8s-external-dns-webhook/commit/5c01b2f2aae5ec2164f2816b676bb40c39b0a3a2))
+
+
+### Miscellaneous Chores
+
+* **deps:** bump actions/checkout from 6 to 7 ([#172](https://github.com/anexia/k8s-external-dns-webhook/issues/172)) ([bdf1f6a](https://github.com/anexia/k8s-external-dns-webhook/commit/bdf1f6ad96c92f9f9057e1bdd628f945d61a777b))
+* **deps:** bump actions/setup-go from 6 to 7 ([#175](https://github.com/anexia/k8s-external-dns-webhook/issues/175)) ([cf95dc1](https://github.com/anexia/k8s-external-dns-webhook/commit/cf95dc1f44f608977dc329c2c7cf32882489af8f))
+* **deps:** bump docker/login-action from 4 to 4.5.2 ([#180](https://github.com/anexia/k8s-external-dns-webhook/issues/180)) ([c9812b6](https://github.com/anexia/k8s-external-dns-webhook/commit/c9812b6ccca58cd00f5f3360a8f6989f4a73a615))
+* **deps:** bump docker/login-action from 4.5.2 to 4.6.0 ([#187](https://github.com/anexia/k8s-external-dns-webhook/issues/187)) ([d8fa6c4](https://github.com/anexia/k8s-external-dns-webhook/commit/d8fa6c47668e85aa9dea7d94e5a9d3f92267f89e))
+* **deps:** bump github.com/go-chi/chi/v5 from 5.2.5 to 5.3.1 ([#174](https://github.com/anexia/k8s-external-dns-webhook/issues/174)) ([93702f8](https://github.com/anexia/k8s-external-dns-webhook/commit/93702f8422ef47c710c28fd9740acc5d80994df3))
+* **deps:** bump github.com/sirupsen/logrus from 1.9.4 to 1.10.0 ([#182](https://github.com/anexia/k8s-external-dns-webhook/issues/182)) ([dd19a30](https://github.com/anexia/k8s-external-dns-webhook/commit/dd19a30269e4003088e776607373a4ecd3e37914))
+* **deps:** bump github.com/stretchr/testify from 1.11.1 to 1.12.0 ([#181](https://github.com/anexia/k8s-external-dns-webhook/issues/181)) ([8e67990](https://github.com/anexia/k8s-external-dns-webhook/commit/8e67990deba7261fc892a15316fcc6321c22f053))
+* **deps:** bump github.com/stretchr/testify from 1.12.0 to 1.12.1 ([#188](https://github.com/anexia/k8s-external-dns-webhook/issues/188)) ([adf866f](https://github.com/anexia/k8s-external-dns-webhook/commit/adf866f7f346a9679e26aa93eb4b3b0f8b7f3840))
+* **deps:** bump go.anx.io/go-anxcloud from 0.14.1 to 0.14.5 ([#176](https://github.com/anexia/k8s-external-dns-webhook/issues/176)) ([040dc36](https://github.com/anexia/k8s-external-dns-webhook/commit/040dc362145e4412162c8b76a8f01ea4c32dcc11))
+* **deps:** bump golang.org/x/text and golang.org/x/net to fix vulnerabilities ([#178](https://github.com/anexia/k8s-external-dns-webhook/issues/178)) ([33bc8bb](https://github.com/anexia/k8s-external-dns-webhook/commit/33bc8bbf4d365033f90b5a0448c50e83a6087794))
+* **deps:** bump hadolint/hadolint-action from 3.3.0 to 3.4.0 ([#179](https://github.com/anexia/k8s-external-dns-webhook/issues/179)) ([9bb507f](https://github.com/anexia/k8s-external-dns-webhook/commit/9bb507f837c21c69962a1a03554b64423d303f67))
+* **deps:** bump sigstore/cosign-installer from 4.1.1 to 4.1.2 ([#167](https://github.com/anexia/k8s-external-dns-webhook/issues/167)) ([0ad94dc](https://github.com/anexia/k8s-external-dns-webhook/commit/0ad94dc038a70259676a0164a7c6e0ebf552c4d0))
+
 ## [0.3.1](https://github.com/anexia/k8s-external-dns-webhook/compare/v0.3.0...v0.3.1) (2026-05-05)
 
 
