@@ -30,6 +30,10 @@ lint: ## Run golangci-lint and go vet
 	golangci-lint run -c .golangci.yml
 	go vet ./...
 
+.PHONY: vulncheck
+vulncheck: ## Run govulncheck vulnerability scanner
+	go tool govulncheck ./...
+
 .PHONY: tidy
 tidy: ## Tidy go.mod/go.sum
 	go mod tidy

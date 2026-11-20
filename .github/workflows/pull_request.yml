@@ -39,6 +39,7 @@ jobs:
         uses: actions/setup-go@v7
         with:
           go-version: stable
+          check-latest: true
 
       - name: Run golangci-lint
         uses: golangci/golangci-lint-action@v9
@@ -48,6 +49,10 @@ jobs:
       - name: Vet Provider
         run: |
           go vet ./...
+
+      - name: Run vulncheck
+        run: |
+          make vulncheck
 
   test:
     runs-on: ubuntu-latest
